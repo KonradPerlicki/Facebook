@@ -20,7 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('components.auth.form-register');
     }
 
     /**
@@ -33,22 +33,24 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $attributes = $request->validate([
+            'first_name' => 'required|string|max:255|min:3',
+            'last_name' => 'required|string|max:255|min:3',
+            'username' => 'required|string|max:255|min:3|unique:users,username',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()->numbers()],
+            'gender' => 'required',
+            'phone' => 'numeric|digits:9|nullable|unique:users,phone',
+            'terms' => 'required'
         ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $attributes['password'] = Hash::make($attributes['password']);
+        $user = User::create($attributes);
 
         event(new Registered($user));
-
         Auth::login($user);
-
+        //sending verification email to user email
+        $request->user()->sendEmailVerificationNotification();
+        
         return redirect(RouteServiceProvider::HOME);
     }
 }

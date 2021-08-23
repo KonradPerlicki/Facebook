@@ -1,9 +1,9 @@
-@props(['styles' =>'' , 'index' => '' , 'scripts' => ''])
+@props(['styles' =>'' , 'index' => '' , 'scripts' => '' ,'title' => 'Nasza Klasa' , 'showSideBar' => true])
 {{-- START: OPENING PAGE 
 ================================================================
 --}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,31 +11,34 @@
     <link href="assets/images/favicon.png" rel="icon" type="image/png">
     <!-- Basic Page Needs
         ================================================== -->
-    <title>Nasza Klasa</title>
+    <title>{{ $title }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- icons
     ================================================== -->
-    <link rel="stylesheet" href="assets/css/icons.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}">
     <!-- CSS 
     ================================================== -->
-    <link rel="stylesheet" href="assets/css/uikit.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/tailwind.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/uikit.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tailwind.css') }}">
     {{ $styles }}
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper" {{ $attributes }}>
+    @if($showSideBar)
         <x-layout.top-bar /> {{-- Top Bar and Sidebar --}}
         {{-- END: OPENING PAGE 
         ================================================================
         --}}
+    @endif
         {{ $slot }}
 
-{{-- TODO: DELETE unnecessary vars --}}
+{{-- TODO: DELETE unnecessary vars index is unused --}}
         {{ $index }}
     </div>
+    @if($showSideBar)
         {{-- START: CLOSING PAGE 
         ================================================================
         --}}
@@ -103,7 +106,7 @@
                 </div>
             </div>
         </div>
-
+    @endif
         <!-- For Night mode -->
         <script>
             (function (window, document, undefined) {
@@ -142,12 +145,12 @@
 
         <!-- Javascript
         ================================================== -->
-        <script src="assets/js/jquery-3.3.1.min.js"></script>
-        <script src="assets/js/tippy.all.min.js"></script>
-        <script src="assets/js/uikit.js"></script>
-        <script src="assets/js/simplebar.js"></script>
-        <script src="assets/js/custom.js"></script>
-        <script src="assets/js/bootstrap-select.min.js"></script>
+        <script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ asset('assets/js/tippy.all.min.js') }}"></script>
+        <script src="{{ asset('assets/js/uikit.js') }}"></script>
+        <script src="{{ asset('assets/js/simplebar.js') }}"></script>
+        <script src="{{ asset('assets/js/custom.js') }}"></script>
+        <script src="{{ asset('assets/js/bootstrap-select.min.js') }}"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         {{ $scripts }}

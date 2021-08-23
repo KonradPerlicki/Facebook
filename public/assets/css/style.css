@@ -290,7 +290,6 @@ select, textarea, input, input[type="text"], input[type="password"], input[type=
   font-weight: 500;
   opacity: 1;
   border-radius: 6px;
-  border: none;
 }
 
 select {
@@ -309,7 +308,6 @@ input:focus, input[type="text"]:focus, input[type="password"]:focus, input[type=
   transition: box-shadow 0.2s !important;
   transition: box-shadow 0.2s, -webkit-box-shadow 0.2s !important;
   opacity: 1;
-  border: none;
 }
 
 textarea:focus {
@@ -319,7 +317,6 @@ textarea:focus {
   transition: box-shadow 0.2s !important;
   transition: box-shadow 0.2s, -webkit-box-shadow 0.2s !important;
   opacity: 1;
-  border: none;
 }
 
 input:-webkit-autofill {

@@ -11,7 +11,7 @@
         </div>
 
         <!-- Validation Errors -->
-        <x-breeze.auth-validation-errors class="mb-4" :errors="$errors" />
+        <x-flash-messages.auth-validation-errors class="mb-4" :errors="$errors" />
 
         <form method="POST" action="{{ route('password.confirm') }}">
             @csrf

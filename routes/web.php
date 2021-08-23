@@ -18,16 +18,22 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 //main
-Route::get('/', function () {return view('index');})->name('home');
+Route::group(['middleware'=> ['verified', 'auth']], function(){
+    Route::get('/', function () {return view('index');})->name('home');
 
-Route::get('/pages', [PageController::class, 'index'])->name('pages');
-Route::get('/videos', [VideoController::class, 'index'])->name('videos');
-Route::get('/groups', [GroupController::class, 'index'])->name('groups');
-Route::get('/courses', [CourseController::class, 'index'])->name('courses');
-Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
-Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-Route::get('/products', [ProductController::class, 'index'])->name('products');
-Route::get('/events', [EventController::class, 'index'])->name('events');
-Route::get('/albums', [AlbumController::class, 'index'])->name('albums');
-Route::get('/games', [GameController::class, 'index'])->name('games');
-Route::get('/forums', [ForumController::class, 'index'])->name('forums');
+    #Route::get('/pages', [PageController::class, 'index'])->name('pages');
+    #Route::get('/videos', [VideoController::class, 'index'])->name('videos');
+    Route::get('/groups', [GroupController::class, 'index'])->name('groups');
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses');
+    #Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
+    #Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+    #Route::get('/products', [ProductController::class, 'index'])->name('products');
+    #Route::get('/events', [EventController::class, 'index'])->name('events');
+    #Route::get('/albums', [AlbumController::class, 'index'])->name('albums');
+    #Route::get('/games', [GameController::class, 'index'])->name('games');
+    #Route::get('/forums', [ForumController::class, 'index'])->name('forums');
+
+});
+
+
+
