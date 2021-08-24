@@ -25,6 +25,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'gender',
         'phone',
+        'about_me',
+        'location',
+        'working_at',
+        'relationship',
+        'background_image',
+        'profile_image',
     ];
 
     /**
@@ -45,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function settings()
+    {
+        return $this->hasOne(Settings::class);
+    }
 }

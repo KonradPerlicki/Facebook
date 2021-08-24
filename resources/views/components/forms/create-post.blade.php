@@ -1,6 +1,6 @@
 <div class="card lg:mx-0 p-4" uk-toggle="target: #create-post-modal">
     <div class="flex space-x-3">
-        <img src="assets/images/avatars/avatar-2.jpg" class="w-10 h-10 rounded-full">
+        <img src="{{ Storage::url($user->profile_image) }}" class="w-10 h-10 rounded-full">
         <input placeholder="What's Your Mind ?" class="bg-gray-100 hover:bg-gray-200 flex-1 h-10 px-6 rounded-full"> 
     </div>
     <div class="grid grid-flow-col pt-3 -mx-1 -mb-1 font-semibold text-sm">
@@ -26,7 +26,7 @@
             <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
         </div>
         <div class="flex flex-1 items-start space-x-4 p-5">
-            <img src="assets/images/avatars/avatar-2.jpg"
+            <img src="{{ Storage::url($user->profile_image) }}"
                 class="bg-gray-200 border border-white rounded-full w-11 h-11">
             <div class="flex-1 pt-2">
                 <textarea class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5"
@@ -45,15 +45,14 @@
                     <svg id="veiw-more" hidden class="bg-red-100 text-red-600 h-9 p-1.5 rounded-full bg-pink-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <!-- view more -->
                     <svg class="hover:bg-gray-200 h-9 p-1.5 rounded-full w-9 cursor-pointer" id="veiw-more" uk-toggle="target: #veiw-more; animation: uk-animation-fade" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"> </path></svg>
-                
                 </div>
             </div>
         </div>
         <div class="flex items-center w-full justify-between border-t p-3">
             <select class="selectpicker mt-2 story">
-                <option>Only me</option>
                 <option>Every one</option>
-                <option>People I Follow </option>
+                <option>Only me</option>
+                <option>Only my friends and their friends</option>
             </select>
             <div class="flex space-x-2">
                 <a href="#" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">

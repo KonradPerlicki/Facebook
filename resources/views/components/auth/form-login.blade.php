@@ -33,14 +33,21 @@
                             <label class="mb-0 @error('password') text-red-500 @enderror"> Password </label>
                             <input name="password" type="password" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('password') border-2 border-red-500 @enderror">
                         </div>
+                        <div class="checkbox">
+                            <input id="remember_me" type="checkbox"  name="remember">
+                            <label for="remember_me" class="mb-0">
+                                <span><span class="checkbox-icon"></span>{{ __('Remember me') }}</span>
+                            </label>
+                        </div>
                         <div>
                             @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-                            <button type="submit" class="bg-blue-600 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">
-                                Log In!</button>
+                                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                                    {{ __('Forgot your password?') }}
+                                </a>
+                            @endif
+                        <button type="submit" class="bg-blue-600 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">
+                            Log In!
+                        </button>
                         </div>
                     </form>
                 </div>

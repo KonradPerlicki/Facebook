@@ -8,8 +8,8 @@
 
                 <div id="logo">
                     <a href="/"> 
-                        <img src="assets/images/logo.png" alt="" class="w-32">
-                        <img src="assets/images/logo-mobile.png" class="logo_mobile" alt="">
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="" class="w-32">
+                        <img src="{{ asset('assets/images/logo-mobile.png') }}" class="logo_mobile" alt="">
                     </a>
                 </div>
             </div>
@@ -228,17 +228,17 @@
 
                     {{-- START: Account image --}}
                     <a href="#">
-                        <img src="assets/images/avatars/avatar-2.jpg" class="is_avatar" alt="">
+                        <img src="{{ Storage::url($user->profile_image) }}" class="is_avatar" alt="">
                     </a>
                     <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
-                        <a href="timeline.html" class="user">
+                        <a href="{{ route('profile', $user->username) }}" class="user">
                             <div class="user_avatar">
-                                <img src="assets/images/avatars/avatar-2.jpg" alt="">
+                                <img src="{{ Storage::url($user->profile_image) }}" alt="">
                             </div>
                             <div class="user_name">
-                                <div> Stella Johnson </div>
-                                <span> @johnson</span>
+                                <div> {{ $user->first_name . ' ' . $user->last_name}} </div>
+                                <span> {{ '@'.$user->username }}</span>
                             </div>
                         </a>
                         <hr>
@@ -253,7 +253,15 @@
                                 <span class="uk-switch-button"></span>
                             </span>
                         </a>
-                        <x-layout.top-bar.user-dropdown-item name="logout">Log out</x-layout.top-bar.user-dropdown-item>
+                        <a href="#">
+                            <x-layout.top-bar.svg name="logout"/>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit">
+                                    {{ __('Log Out') }}
+                                </button>
+                            </form>
+                        </a>
                     </div>
                     {{-- END: Account image --}}
                 </div>

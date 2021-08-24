@@ -1,4 +1,4 @@
-@props(['styles' =>'' , 'index' => '' , 'scripts' => '' ,'title' => 'Nasza Klasa' , 'showSideBar' => true])
+@props(['styles' =>'' , 'index' => '' , 'scripts' => '' ,'title' => 'Nasza Klasa' , 'showSideBar' => true, 'user'])
 {{-- START: OPENING PAGE 
 ================================================================
 --}}
@@ -28,15 +28,13 @@
 <body>
     <div id="wrapper" {{ $attributes }}>
     @if($showSideBar)
-        <x-layout.top-bar /> {{-- Top Bar and Sidebar --}}
+        <x-layout.top-bar :user="$user" /> {{-- Top Bar and Sidebar --}}
         {{-- END: OPENING PAGE 
         ================================================================
         --}}
     @endif
         {{ $slot }}
 
-{{-- TODO: DELETE unnecessary vars index is unused --}}
-        {{ $index }}
     </div>
     @if($showSideBar)
         {{-- START: CLOSING PAGE 
@@ -56,14 +54,10 @@
         <div id="offcanvas-chat" uk-offcanvas="flip: true; overlay: true">
             <div class="uk-offcanvas-bar bg-white p-0 w-full lg:w-80 shadow-2xl">
                 <div class="relative pt-5 px-4">
-
                     <h3 class="text-2xl font-bold mb-2"> Chats </h3>
-
                     <div class="absolute right-3 top-4 flex items-center">
-
                         <button class="uk-offcanvas-close  px-2 -mt-1 relative rounded-full inset-0 lg:hidden blcok"
                             type="button" uk-close></button>
-
                         <a href="#" uk-toggle="target: #search;animation: uk-animation-slide-top-small">
                             <ion-icon name="search" class="text-xl hover:bg-gray-100 p-1 rounded-full"></ion-icon>
                         </a>
@@ -76,14 +70,12 @@
                         class="text-2xl hover:bg-gray-100 p-1 rounded-full mr-4 cursor-pointer"
                         uk-toggle="target: #search;animation: uk-animation-slide-top-small"></ion-icon>
                 </div>
-
                 <nav class="responsive-nav border-b extanded mb-2 -mt-2">
                     <ul uk-switcher="connect: #chats-tab; animation: uk-animation-fade">
                         <li class="uk-active"><a class="active" href="#0"> Friends </a></li>
                         <li><a href="#0">Groups <span> 10 </span> </a></li>
                     </ul>
                 </nav>
-
                 <div class="contact-list px-2 uk-switcher" id="chats-tab">
                     {{-- FRIENDS --}}
                     <div class="p-1">

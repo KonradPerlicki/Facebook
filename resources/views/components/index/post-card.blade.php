@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
             <a href="#">
-                <img src="assets/images/avatars/avatar-2.jpg" class="bg-gray-200 border border-white rounded-full w-10 h-10">
+                <img src="{{ asset('assets/images/avatars/avatar-2.jpg') }}" class="bg-gray-200 border border-white rounded-full w-10 h-10">
             </a>
             <div class="flex-1 font-semibold capitalize">
                 <a href="#" class="text-black dark:text-gray-100"> Johnson smith </a><span class="text-sm font-medium"> - feeling Amazing</span>
@@ -53,7 +53,7 @@
         tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim laoreet
          dolore magna aliquam erat volutpat - with <span class="text-blue-500 cursor-pointer hover:underline"><a >Andrzej Jędrzej</a></span> {{-- TODO: add -with <span></span> --}}
         {{-- if have image or antyhing else /vid/maps --}}
-        <img src="assets/images/avatars/avatar-lg-4.jpg" alt="" class="max-h-96 w-full object-cover">
+        <img src="{{ asset('assets/images/avatars/avatar-lg-4.jpg') }}" alt="" class="max-h-96 w-full object-cover">
         
     </div>
 
@@ -86,9 +86,9 @@
         </div>
         <div class="flex items-center space-x-3 pt-2"> 
             <div class="flex items-center">
-                <img src="assets/images/avatars/avatar-1.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
-                <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-                <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+                <img src="{{ asset('assets/images/avatars/avatar-1.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
+                <img src="{{ asset('assets/images/avatars/avatar-4.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+                <img src="{{ asset('assets/images/avatars/avatar-2.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
             </div>
             <div class="dark:text-gray-100">
                 Liked <strong> Johnson</strong> and <strong> 209 Others </strong>

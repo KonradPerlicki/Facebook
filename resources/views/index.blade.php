@@ -1,4 +1,4 @@
-<x-layout.layout>
+<x-layout.layout :user="$user">
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
@@ -16,7 +16,7 @@
                       </div>
                       {{-- END: Stories top --}}
                       {{-- START: Create Post Section --}}
-                      <x-forms.create-post />
+                      <x-forms.create-post :user="$user"/>
                       {{-- END: Create Post Section --}}
               
                       <x-index.post-card />
