@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
     <link href="assets/images/favicon.png" rel="icon" type="image/png">
     <!-- Basic Page Needs
@@ -22,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/uikit.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/tailwind.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     {{ $styles }}
 </head>
 
@@ -134,7 +136,30 @@
 
     })(window, document);
         </script>
-
+<script>
+    function msg(id)
+    {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            'type' : 'POST',
+            'url':'/like',
+            'dataType':'json',
+            'data' :{id:id},
+            success:function(data){
+                $('#like'+id).html(data.txt);
+                if(data.filled){
+                    $('#like-icon'+id).addClass('text-blue-500')
+                }else{
+                    $('#like-icon'+id).removeClass('text-blue-500')
+                }
+            }
+        })
+    }
+</script>
         <!-- Javascript
         ================================================== -->
         <script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>

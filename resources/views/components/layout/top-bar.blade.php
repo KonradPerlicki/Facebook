@@ -242,7 +242,7 @@
                             </div>
                         </a>
                         <hr>
-                        <x-layout.top-bar.user-dropdown-item name="settings">Settings</x-layout.top-bar.user-dropdown-item>
+                        <x-layout.top-bar.user-dropdown-item name="{{ route('settings') }}">Settings</x-layout.top-bar.user-dropdown-item>
                         <a href="#" id="night-mode" class="btn-night-mode">
                             <x-layout.top-bar.svg name="darkmode" />
                              Night mode

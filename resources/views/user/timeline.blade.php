@@ -76,9 +76,11 @@
                            {{-- Create post form --}}
                            <x-forms.create-post :user="$user"/>
                             {{-- Posts TODO PAGINATION --}}
-                           <x-index.post-card />
-                           <x-index.post-card />
-                           <x-index.post-card />
+
+                            @foreach ($posts as $post)
+                                <x-index.post-card :post="$post"/>
+                            @endforeach
+
                         </div>
                         <!-- Sidebar -->
                         <div class="w-full space-y-6">
@@ -97,7 +99,7 @@
                                     @endif
                                     <li class="flex items-center space-x-2"> 
                                         <ion-icon name="document-text-outline" class="rounded-full bg-gray-200 text-xl p-1 mr-3"></ion-icon>
-                                        Total posts: <strong> 240 </strong>{{-- TODO count posts --}}
+                                        Total posts: <strong>{{-- -$user->posts->count() problem n+1? --}} 230 </strong>{{-- TODO count posts --}}
                                     </li>                                
                                 </ul>
                             </div>

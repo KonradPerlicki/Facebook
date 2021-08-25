@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\Ajax\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,13 +28,20 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
         'user' => auth()->user(),
         'posts' => Post::latest()->get()
     ]);})->name('home');
+
+    //ajax
+    Route::post('/like', [LikeController::class, 'manageLikes']);
+
+    //profile
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
     
+    //post
     Route::post('/post',[PostController::class, 'store'])->name('post.create');
     Route::put('/post/{id}',[PostController::class, 'update'])->name('post.update');
     Route::delete('/post/{id}',[PostController::class, 'destroy'])->name('post.destroy');
 
-    Route::get('/settings', [SettingsController::class, 'index']);
+    //settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingsController::class, 'update']);
 
     #Route::get('/pages', [PageController::class, 'index'])->name('pages');
