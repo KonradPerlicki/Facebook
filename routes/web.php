@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +25,14 @@ require __DIR__.'/auth.php';
 //main
 Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/', function () {return view('index', [
-        'user' => auth()->user()
+        'user' => auth()->user(),
+        'posts' => Post::latest()->get()
     ]);})->name('home');
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
+    
+    Route::post('/post',[PostController::class, 'store'])->name('post.create');
+    Route::put('/post/{id}',[PostController::class, 'update'])->name('post.update');
+    Route::delete('/post/{id}',[PostController::class, 'destroy'])->name('post.destroy');
 
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::put('/settings', [SettingsController::class, 'update']);

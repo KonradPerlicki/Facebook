@@ -20,10 +20,10 @@
                         @csrf
                         <h1 class="lg:text-2xl text-xl font-semibold mb-6"> Register </h1>
                         <!-- Session Status -->
-                        <x-flash-messages.auth-session-status class="mb-4" :status="session('status')" />
+                        <x-flash-messages.auth-session-status class="mb-4 p-4 bg-green-100 rounded-xl" :status="session('status')" />
 
                         <!-- Validation Errors -->
-                        <x-flash-messages.auth-validation-errors class="mb-4" :errors="$errors"/>
+                        <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors"/>
 
                         <div class="grid lg:grid-cols-2 gap-3">
                             <div>

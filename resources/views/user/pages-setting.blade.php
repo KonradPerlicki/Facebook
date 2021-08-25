@@ -23,7 +23,7 @@
                         <p class="mb-4"> Lorem ipsum dolor sit amet nibh consectetuer adipiscing elit</p>
 
                          <!-- Session Status -->
-                         <x-flash-messages.auth-session-status class="mb-4" :status="session('status')" />
+                         <x-flash-messages.auth-session-status class="mb-4 p-4 bg-green-100 rounded-xl" :status="session('status')" />
 
                          <!-- Validation Errors -->
                          <x-flash-messages.auth-validation-errors class="mb-4" :errors="$errors"/>
@@ -101,9 +101,9 @@
                                 </div>
                                 <select name="who_can_follow"
                                         class="shadow-none selectpicker with-border ">
-                                    <option value="2" {{ $user->settings->who_can_follow=2 ? 'selected' : '' }}>Everyone</option>
-                                    <option value="1" {{ $user->settings->who_can_follow=1 ? 'selected' : '' }}>Only friends my friends</option>
-                                    <option value="0" {{ $user->settings->who_can_follow=0 ? 'selected' : '' }}>Anyone</option>
+                                    <option value="2" {{ $user->settings->who_can_follow==2 ? 'selected' : '' }}>Everyone</option>
+                                    <option value="1" {{ $user->settings->who_can_follow==1 ? 'selected' : '' }}>Only friends my friends</option>
+                                    <option value="0" {{ $user->settings->who_can_follow==0 ? 'selected' : '' }}>Anyone</option>
                                 </select>
                             </div>
                             <hr>
@@ -113,10 +113,10 @@
                                     <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, </div>
                                 </div>
                                 <select name="show_my_activities"
-                                        class="shadow-none selectpicker with-border ">
-                                    <option value="2" {{ $user->settings->show_my_activities=2 ? 'selected' : '' }}>Everyone</option>
-                                    <option value="1" {{ $user->settings->show_my_activities=1 ? 'selected' : '' }}>Only my friends and their friends</option>
-                                    <option value="0" {{ $user->settings->show_my_activities=0 ? 'selected' : '' }}>Anyone</option>
+                                        class="shadow-none selectpicker story with-border ">
+                                    <option value="2" {{ $user->settings->show_my_activities==2 ? 'selected' : '' }}>Every one</option>
+                                    <option value="1" {{ $user->settings->show_my_activities==1 ? 'selected' : '' }}>Only my friends and their friends</option>
+                                    <option value="0" {{ $user->settings->show_my_activities==0 ? 'selected' : '' }}>Any one</option>
                                 </select>
                             </div>
                             <hr>
@@ -141,7 +141,7 @@
                     </form>
                     </div>
                 </div>
-                {{-- Notifications section --}}
+                {{-- Notifications section TODO--}}
                 <div class="grid lg:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2"> Notification</h3>

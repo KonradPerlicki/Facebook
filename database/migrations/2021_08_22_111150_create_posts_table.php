@@ -15,6 +15,13 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users','id')->onDelete('cascade');
+            $table->text('content')->nullable();
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
+            #$table->string('friends')->nullable(); TODO
+            #$table->string('feeling')->nullable();
+            $table->tinyInteger('who_can_see');
             $table->timestamps();
         });
     }

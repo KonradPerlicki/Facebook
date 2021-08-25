@@ -11,7 +11,7 @@
         </div>
 
         <!-- Validation Errors -->
-        <x-flash-messages.auth-validation-errors class="mb-4" :errors="$errors" />
+        <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors" />
 
         <form method="POST" action="{{ route('password.confirm') }}">
             @csrf

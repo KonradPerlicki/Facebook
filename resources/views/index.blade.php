@@ -6,7 +6,13 @@
                 <!--  Feeds  -->
                 <div class="lg:flex lg:space-x-10">
                   <div class="lg:w-3/4 lg:px-20 space-y-7">
-                      {{-- START: Stories top TODO: MAX 5 DISPLAY --}}
+                        <!-- Session Status -->
+                        <x-flash-messages.auth-session-status class="mb-4 p-4 bg-green-100 rounded-xl" :status="session('status')" />
+
+                        <!-- Validation Errors -->
+                        <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors" />
+                      
+                        {{-- START: Stories top TODO: MAX 5 DISPLAY --}}
                       <div class="user_story grid md:grid-cols-5 grid-cols-3 gap-2 lg:-mx-20 relative">
                           <x-index.story-preview name="Johnathan" />
                           <x-index.story-preview name="Johnathan" />
@@ -18,11 +24,9 @@
                       {{-- START: Create Post Section --}}
                       <x-forms.create-post :user="$user"/>
                       {{-- END: Create Post Section --}}
-              
-                      <x-index.post-card />
-                      <x-index.post-card />
-                      <x-index.post-card />
-                      
+                      @foreach ($posts as $post)
+                          <x-index.post-card :post="$post"/>
+                      @endforeach
                   </div>
                   {{-- START: Right column --}}
                   <div class="lg:w-80 w-full">

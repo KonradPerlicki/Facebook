@@ -3,92 +3,224 @@
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
             <a href="#">
-                <img src="{{ asset('assets/images/avatars/avatar-2.jpg') }}" class="bg-gray-200 border border-white rounded-full w-10 h-10">
+                <img src="{{ Storage::url($post->author->profile_image) }}"
+                    class="bg-gray-200 border border-white rounded-full w-10 h-10">
             </a>
-            <div class="flex-1 font-semibold capitalize">
-                <a href="#" class="text-black dark:text-gray-100"> Johnson smith </a><span class="text-sm font-medium"> - feeling Amazing</span>
-                <div class="text-gray-700 flex items-center space-x-2"> 5 <span> hrs </span> <ion-icon name="people"></ion-icon></div>
+            <div class="flex-1 capitalize">
+                <a href="#" class="text-black dark:text-gray-100 font-semibold">
+                    {{ $post->author->first_name . ' ' . $post->author->last_name}}</a>
+                <div class="text-gray-700 flex items-center space-x-2 font-medium">
+                    {{$post->created_at->diffForHumans()}} <span> </span>
+                    @if($post->who_can_see == '2') <ion-icon name="globe-outline"></ion-icon> @endif
+                    @if($post->who_can_see == '1') <ion-icon name="people"></ion-icon> @endif
+                    @if($post->who_can_see == '0') <ion-icon name="person"></ion-icon> @endif
+                </div>
             </div>
         </div>
-      <div>
-        <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
-        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700" 
-        uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
-            <ul class="space-y-1">
-              <li> 
-                  <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                   <i class="uil-share-alt mr-1"></i> Share
-                  </a> 
-              </li>
-              <li> 
-                  <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                   <i class="uil-edit-alt mr-1"></i>  Edit Post 
-                  </a> 
-              </li>
-              <li> 
-                  <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                   <i class="uil-comment-slash mr-1"></i>   Disable comments
-                  </a> 
-              </li> 
-              <li> 
-                  <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                   <i class="uil-favorite mr-1"></i>  Add favorites 
-                  </a> 
-              </li>
-              <li>
-                <hr class="-mx-2 my-2 dark:border-gray-800">
-              </li>
-              <li> 
-                  <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                   <i class="uil-trash-alt mr-1"></i>  Delete
-                  </a> 
-              </li>
-            </ul>
+        @if($post->author->id == auth()->id())
+        <div>
+            <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i>
+            </a>
+            <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
+                uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
+                <ul class="space-y-1">
+                    <li>
+                        <button uk-toggle="target: #post-edit{{ $post->id }}" type="button"
+                            class=" w-full flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                            <i class="uil-edit-alt mr-1"></i> Edit Post
+                        </button>
+                        <div id="post-edit{{ $post->id }}" class=" flex-row create-post is-story" uk-modal>
+                            <div class="m-0 mr-4 uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+                                <div class="text-center py-3 border-b">
+                                    <h3 class="text-lg font-semibold"> Edit Post </h3>
+                                    <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2"
+                                        type="button" uk-close
+                                        uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+                                </div>
+                                <form method="POST" action="{{ route('post.update', $post->id) }}" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="flex flex-1 items-start space-x-4 p-5">
+                                        <img src="{{ Storage::url($post->author->profile_image) }}"
+                                            class="bg-gray-200 border border-white rounded-full w-11 h-11">
+                                        <div class="flex-1 pt-2">
+                                            <textarea name="content"
+                                                class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
+                                                rows="5"
+                                                placeholder="What's Your Mind ?">{{ $post->content }}</textarea>
+                                            @if($post->image || $post->video)
+                                            <div class="ml-auto w-40 h-40">
+                                                @if($post->image)
+                                                <img src="{{ Storage::url($post->image) }}" class="w-40 h-40">
+                                                <div class="checkbox">
+                                                    <input id="remove_image{{ $post->id }}" type="checkbox"
+                                                        name="remove_image">
+                                                    <label for="remove_image{{ $post->id }}" class="mb-0">
+                                                        <span><span class="checkbox-icon"></span>Remove image</span>
+                                                    </label>
+                                                </div>
+                                                @endif
+                                                @if($post->video)
+                                                <video controls width="400" class="float-right">
+                                                    <source src="{{ Storage::url($post->video) }}">
+                                                    Your browser does not support HTML videos.
+                                                </video>
+                                                <div class="checkbox">
+                                                    <input id="remove_video{{ $post->id }}" type="checkbox"
+                                                        name="remove_video">
+                                                    <label for="remove_video{{ $post->id }}" class="mb-0">
+                                                        <span><span class="checkbox-icon"></span>Remove video</span>
+                                                    </label>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="p-4 space-x-4 w-full">
+                                        <div
+                                            class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
+                                            <div class="ml-1"> Change image or video </div>
+                                            <div class="flex flex-1 items-center justify-end space-x-2">
+                                                <input name="image" type="file" hidden id="image{{ $post->id }}" accept="image/*">
+                                                <label class="mb-0" for="image{{ $post->id }}">
+                                                    <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                        </path>
+                                                    </svg>
+                                                </label>
+                                                <input name="video" type="file" hidden id="video{{ $post->id }}"
+                                                    accept="video/mp4,video/x-m4v,video/*">
+                                                <label class="mb-0" for="video{{ $post->id }}">
+                                                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
+                                                        </path>
+                                                    </svg>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center w-full justify-between border-t p-3">
+                                        <select name="who_can_see" class="selectpicker mt-2 story">
+                                            <option value="2" {{ $post->who_can_see == 2 ? 'selected' : '' }}>Every one
+                                            </option>
+                                            <option value="1" {{ $post->who_can_see == 1 ? 'selected' : '' }}>Only my
+                                                friends and their friends</option>
+                                            <option value="0" {{ $post->who_can_see == 0 ? 'selected' : '' }}>Only me
+                                            </option>
+                                        </select>
+                                        <div class="flex space-x-2">
+                                            <button type="submit"
+                                                class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                                                Update </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                            <i class="uil-comment-slash mr-1"></i> Disable comments
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="-mx-2 my-2 dark:border-gray-800">
+                    </li>
+                    <li>
+                        <button uk-toggle="target: #post-delete{{ $post->id }}" type="button"
+                            class="flex items-center w-full px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                            <i class="uil-trash-alt mr-1"></i> Delete
+                        </button>
+                        <div id="post-delete{{ $post->id }}" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body rounded-md">
+                                <h2 class="text-xl">Are you sure you want to delete this post?</h2>
+                                <p class="text-gray-500 mb-8">This action can't be undone.</p>
+                                <form action="{{ route('post.destroy',  $post->id ) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-red-500 text-white text-lg rounded-xl p-2 absolute bottom-4 right-4">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
+        @endif
     </div>
 
-    <div class="p-3 border-b dark:border-gray-700">
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod 
-        tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim laoreet
-         dolore magna aliquam erat volutpat - with <span class="text-blue-500 cursor-pointer hover:underline"><a >Andrzej Jędrzej</a></span> {{-- TODO: add -with <span></span> --}}
-        {{-- if have image or antyhing else /vid/maps --}}
-        <img src="{{ asset('assets/images/avatars/avatar-lg-4.jpg') }}" alt="" class="max-h-96 w-full object-cover">
-        
+    <div class="p-3 pt-0 border-b dark:border-gray-700">
+        <p>{{ $post->content }}</p>
+        {{-- TODO: add -with <span></span> --}}
+        @if($post->image)
+        <div uk-lightbox>
+            <a href="{{ Storage::url($post->image) }}">
+                <img src="{{ Storage::url($post->image) }}" alt="" class="w-full object-cover">
+            </a>
+        </div>
+        @endif
+        @if($post->image && $post->video)
+        <hr class="my-2 dark:border-gray-800 mb-3"> @endif
+        @if($post->video)
+        <video controls width="400" class="mx-auto">
+            <source src="{{ Storage::url($post->video) }}">
+            Your browser does not support HTML videos.
+        </video>
+        @endif
     </div>
 
-    <div class="p-4 space-y-3"> 
+    <div class="p-4 space-y-3">
         <div class="flex space-x-4 lg:font-bold">
             <a href="#" class="flex items-center space-x-2">
                 <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600 ">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
-                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
+                        height="22" class="dark:text-gray-100">
+                        <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                     </svg>
                 </div>
                 <div> Like</div>
             </a>
             <a href="#" class="flex items-center space-x-2">
                 <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
-                        <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
+                        height="22" class="dark:text-gray-100">
+                        <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div> Comment</div>
             </a>
             <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
                 <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
-                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
+                        height="22" class="dark:text-gray-100">
+                        <path
+                            d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                     </svg>
                 </div>
                 <div> Share</div>
             </a>
         </div>
-        <div class="flex items-center space-x-3 pt-2"> 
+        <div class="flex items-center space-x-3 pt-2">
             <div class="flex items-center">
-                <img src="{{ asset('assets/images/avatars/avatar-1.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
-                <img src="{{ asset('assets/images/avatars/avatar-4.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-                <img src="{{ asset('assets/images/avatars/avatar-2.jpg') }}" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+                <img src="{{ asset('assets/images/avatars/avatar-1.jpg') }}" alt=""
+                    class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
+                <img src="{{ asset('assets/images/avatars/avatar-4.jpg') }}" alt=""
+                    class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+                <img src="{{ asset('assets/images/avatars/avatar-2.jpg') }}" alt=""
+                    class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
             </div>
             <div class="dark:text-gray-100">
                 Liked <strong> Johnson</strong> and <strong> 209 Others </strong>
@@ -99,8 +231,8 @@
             <x-index.post-comment />
             <x-index.post-comment />
         </div>
-        
-        <a href="#" class="hover:text-blue-600 hover:underline">  Veiw 8 more Comments </a>
+
+        <a href="#" class="hover:text-blue-600 hover:underline"> Veiw 8 more Comments </a>
         <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
             <input placeholder="Add your Comment.." class="bg-transparent max-h-10 shadow-none px-5">
             <label for="commentImage" class="-m-0.5 absolute bottom-2 flex items-center right-3 text-xl">
