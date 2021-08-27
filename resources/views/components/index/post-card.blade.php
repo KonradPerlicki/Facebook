@@ -182,17 +182,17 @@
 
     <div class="p-4 space-y-3">
         <div class="flex space-x-4 lg:font-bold">
-            @if ($post->likedBy($post->author))
+            @if ($post->likedBy(auth()->user()))
             <div onclick="msg({{ $post->id }})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
                 <div class="p-2 pt-3 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600 ">
-                    <ion-icon id="like-icon{{ $post->id }}" name="thumbs-up" class="w-5 h-5 text-blue-500"></ion-icon>
+                    <ion-icon id="like-icon{{ $post->id }}" name="thumbs-up" class="w-5 h-5 text-blue-500 @if($post->likedBy(auth()->user())) text-blue-500 @endif"></ion-icon>
                 </div>
                 <div id="like{{ $post->id }}" > Unlike</div>
             </div>
             @else
                 <div onclick="msg({{ $post->id }})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
                     <div class="p-2 pt-3 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600 ">
-                        <ion-icon name="thumbs-up" class="w-5 h-5"></ion-icon>
+                        <ion-icon id="like-icon{{ $post->id }}" name="thumbs-up" class="w-5 h-5"></ion-icon>
                     </div>
                     <div id="like{{ $post->id }}" > Like</div>
                 </div>
@@ -219,27 +219,33 @@
                 <div> Share</div>
             </a>
         </div>
-        @if($post->likes->count())
-            <div class="flex items-center space-x-3 pt-2">
-                <div class="flex items-center">{{-- TODO maybe on click display modal with all users who like and columns for mutual and not mutual --}}
-                    {{--  --}}
-                    @foreach ($post->likes->reverse() as $liker)                   
-                        @if($loop->iteration > 3 )
-                            @break
-                        @endif
-                    <img src="{{ Storage::url($liker->user->profile_image) }}" alt=""
-                        class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-                    @endforeach
-                </div>
-                <div class="dark:text-gray-100">
-                    {{-- this complicated relations displays latest user's first and last name who liked exactly this post --}}
-                    Liked by <strong> {{ $post->likes->last()->user->first_name .' '.  $post->likes->last()->user->last_name }}</strong>
-                    @if ($post->likes->count()>1)
-                        and <strong> {{ $post->likes->count()-1 }} Others </strong>
+        <div id="like-section{{ $post->id }}" class="flex items-center space-x-3 pt-2">
+            <div id="likers-images{{ $post->id }}" class="flex items-center">{{-- TODO maybe on click display modal with all users who like and columns for mutual and not mutual --}}
+                @foreach ($post->likes->take(-3) as $liker) {{-- -3 means 3 from the end --}}              
+                    @if($loop->iteration > 3 )
+                        @break
                     @endif
-                </div>
+                    
+                <img src="{{ Storage::url($liker->user->profile_image) }}" alt=""
+                    class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+                @endforeach
             </div>
-        @endif
+            <div id="has-likes{{ $post->id }}" class="dark:text-gray-100">
+                {{-- this complicated relations displays latest user's first and last name who liked exactly this post --}}
+                @if($post->likes->count())
+                <span id="who-likes{{ $post->id }}">
+                    Liked by <strong id="last-liker{{ $post->id }}"> {{ $post->likes->last()->user->first_name .' '.  $post->likes->last()->user->last_name }}</strong>
+                </span>
+                <span id="likes{{ $post->id }}">
+                    @if ($post->likes->count()>1)
+                        and <strong > {{ $post->likes->count()-1 .' '. Str::plural('Other',$post->likes->count()-1)}}  </strong>
+                    @endif
+                </span>
+                @else
+                    <strong>No one has liked yet</strong>
+                @endif
+            </div>
+        </div>
         <div class="border-t py-4 space-y-4 dark:border-gray-600">
             <x-index.post-comment />
             <x-index.post-comment />
