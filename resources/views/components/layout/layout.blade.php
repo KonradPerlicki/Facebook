@@ -136,6 +136,10 @@
 
     })(window, document);
         </script>
+
+
+
+
 <script>
     function msg(id)
     {
@@ -192,6 +196,24 @@
                 }
                 $('#likers-images'+id).html(images)
             },
+        })
+    }
+
+    function show_likers(id)
+    {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            'type' : 'POST',
+            'url':'/all-likerss',
+            'dataType':'json',
+            'data' :{id:id},
+            success:function(data){
+                console.log(data.html)
+            }
         })
     }
 </script>

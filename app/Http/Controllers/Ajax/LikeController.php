@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 
 class LikeController extends Controller
 {
-    public function manageLikes()
+    public function manage_likes()
     {
         #todo send notification when first liked
         $post = Post::find(request()->id);#request()->id
@@ -51,4 +52,10 @@ class LikeController extends Controller
             'last_user' => isset($last_user) ? $last_user : $current_user
         ],200);
     }
+
+    public function load_all_likers()
+    {
+
+    }
+
 }

@@ -29,103 +29,95 @@
                             class=" w-full flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                             <i class="uil-edit-alt mr-1"></i> Edit Post
                         </button>
-                        <div id="post-edit{{ $post->id }}" class=" flex-row create-post is-story" uk-modal>
-                            <div class="m-0 mr-4 uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-                                <div class="text-center py-3 border-b">
-                                    <h3 class="text-lg font-semibold"> Edit Post </h3>
-                                    <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2"
-                                        type="button" uk-close
-                                        uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
-                                </div>
-                                <form method="POST" action="{{ route('post.update', $post->id) }}" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="flex flex-1 items-start space-x-4 p-5">
-                                        <img src="{{ Storage::url($post->author->profile_image) }}"
-                                            class="bg-gray-200 border border-white rounded-full w-11 h-11">
-                                        <div class="flex-1 pt-2">
-                                            <textarea name="content"
-                                                class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
-                                                rows="5"
-                                                placeholder="What's Your Mind ?">{{ $post->content }}</textarea>
-                                            @if($post->image || $post->video)
-                                            <div class="ml-auto w-40 h-40">
-                                                @if($post->image)
-                                                <img src="{{ Storage::url($post->image) }}" class="w-40 h-40">
-                                                <div class="checkbox">
-                                                    <input id="remove_image{{ $post->id }}" type="checkbox"
-                                                        name="remove_image">
-                                                    <label for="remove_image{{ $post->id }}" class="mb-0">
-                                                        <span><span class="checkbox-icon"></span>Remove image</span>
-                                                    </label>
-                                                </div>
-                                                @endif
-                                                @if($post->video)
-                                                <video controls width="400" class="float-right">
-                                                    <source src="{{ Storage::url($post->video) }}">
-                                                    Your browser does not support HTML videos.
-                                                </video>
-                                                <div class="checkbox">
-                                                    <input id="remove_video{{ $post->id }}" type="checkbox"
-                                                        name="remove_video">
-                                                    <label for="remove_video{{ $post->id }}" class="mb-0">
-                                                        <span><span class="checkbox-icon"></span>Remove video</span>
-                                                    </label>
-                                                </div>
-                                                @endif
+                        <x-modal id="post-edit{{ $post->id }}" title="Edit Post">
+                            <form method="POST" action="{{ route('post.update', $post->id) }}" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="flex flex-1 items-start space-x-4 p-5">
+                                    <img src="{{ Storage::url($post->author->profile_image) }}"
+                                        class="bg-gray-200 border border-white rounded-full w-11 h-11">
+                                    <div class="flex-1 pt-2">
+                                        <textarea name="content"
+                                            class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
+                                            rows="5"
+                                            placeholder="What's Your Mind ?">{{ $post->content }}</textarea>
+                                        @if($post->image || $post->video)
+                                        <div class="ml-auto w-40 h-40">
+                                            @if($post->image)
+                                            <img src="{{ Storage::url($post->image) }}" class="w-40 h-40">
+                                            <div class="checkbox">
+                                                <input id="remove_image{{ $post->id }}" type="checkbox"
+                                                    name="remove_image">
+                                                <label for="remove_image{{ $post->id }}" class="mb-0">
+                                                    <span><span class="checkbox-icon"></span>Remove image</span>
+                                                </label>
+                                            </div>
+                                            @endif
+                                            @if($post->video)
+                                            <video controls width="400" class="float-right">
+                                                <source src="{{ Storage::url($post->video) }}">
+                                                Your browser does not support HTML videos.
+                                            </video>
+                                            <div class="checkbox">
+                                                <input id="remove_video{{ $post->id }}" type="checkbox"
+                                                    name="remove_video">
+                                                <label for="remove_video{{ $post->id }}" class="mb-0">
+                                                    <span><span class="checkbox-icon"></span>Remove video</span>
+                                                </label>
                                             </div>
                                             @endif
                                         </div>
+                                        @endif
                                     </div>
-                                    <div class="p-4 space-x-4 w-full">
-                                        <div
-                                            class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
-                                            <div class="ml-1"> Change image or video </div>
-                                            <div class="flex flex-1 items-center justify-end space-x-2">
-                                                <input name="image" type="file" hidden id="image{{ $post->id }}" accept="image/*">
-                                                <label class="mb-0" for="image{{ $post->id }}">
-                                                    <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer"
-                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                        </path>
-                                                    </svg>
-                                                </label>
-                                                <input name="video" type="file" hidden id="video{{ $post->id }}"
-                                                    accept="video/mp4,video/x-m4v,video/*">
-                                                <label class="mb-0" for="video{{ $post->id }}">
-                                                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer"
-                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
-                                                        </path>
-                                                    </svg>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center w-full justify-between border-t p-3">
-                                        <select name="who_can_see" class="selectpicker mt-2 story">
-                                            <option value="2" {{ $post->who_can_see == 2 ? 'selected' : '' }}>Every one
-                                            </option>
-                                            <option value="1" {{ $post->who_can_see == 1 ? 'selected' : '' }}>Only my
-                                                friends and their friends</option>
-                                            <option value="0" {{ $post->who_can_see == 0 ? 'selected' : '' }}>Only me
-                                            </option>
-                                        </select>
-                                        <div class="flex space-x-2">
-                                            <button type="submit"
-                                                class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                                                Update </button>
+                                </div>
+                                <div class="p-4 space-x-4 w-full">
+                                    <div
+                                        class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
+                                        <div class="ml-1"> Change image or video </div>
+                                        <div class="flex flex-1 items-center justify-end space-x-2">
+                                            <input name="image" type="file" hidden id="image{{ $post->id }}" accept="image/*">
+                                            <label class="mb-0" for="image{{ $post->id }}">
+                                                <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                    </path>
+                                                </svg>
+                                            </label>
+                                            <input name="video" type="file" hidden id="video{{ $post->id }}"
+                                                accept="video/mp4,video/x-m4v,video/*">
+                                            <label class="mb-0" for="video{{ $post->id }}">
+                                                <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
+                                                    </path>
+                                                </svg>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="flex items-center w-full justify-between border-t p-3">
+                                    <select name="who_can_see" class="selectpicker mt-2 story">
+                                        <option value="2" {{ $post->who_can_see == 2 ? 'selected' : '' }}>Every one
+                                        </option>
+                                        <option value="1" {{ $post->who_can_see == 1 ? 'selected' : '' }}>Only my
+                                            friends and their friends</option>
+                                        <option value="0" {{ $post->who_can_see == 0 ? 'selected' : '' }}>Only me
+                                        </option>
+                                    </select>
+                                    <div class="flex space-x-2">
+                                        <button type="submit"
+                                            class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                                            Update </button>
+                                    </div>
+                                </div>
                             </form>
-                        </div>
+                        </x-modal>
                     </li>
                     <li>
                         <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
@@ -197,7 +189,7 @@
                     <div id="like{{ $post->id }}" > Like</div>
                 </div>
             @endif
-            <a href="#" class="flex items-center space-x-2">
+            <a href="#" uk-toggle="target: #all-likers{{ $post->id }}" class="flex items-center space-x-2">
                 <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
                         height="22" class="dark:text-gray-100">
@@ -219,13 +211,12 @@
                 <div> Share</div>
             </a>
         </div>
-        <div id="like-section{{ $post->id }}" class="flex items-center space-x-3 pt-2">
+        <a id="like-section{{ $post->id }}" href="#all-likers{{ $post->id }}" uk-toggle class="flex items-center space-x-3 pt-2 hover:underline cursor-pointer"> 
             <div id="likers-images{{ $post->id }}" class="flex items-center">{{-- TODO maybe on click display modal with all users who like and columns for mutual and not mutual --}}
                 @foreach ($post->likes->take(-3) as $liker) {{-- -3 means 3 from the end --}}              
                     @if($loop->iteration > 3 )
                         @break
                     @endif
-                    
                 <img src="{{ Storage::url($liker->user->profile_image) }}" alt=""
                     class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
                 @endforeach
@@ -245,12 +236,38 @@
                     <strong>No one has liked yet</strong>
                 @endif
             </div>
+        </a>
+        <div id="all-likers{{ $post->id }}" uk-offcanvas>
+            <div class="uk-offcanvas-bar bg-white p-0 w-full lg:w-80 shadow-2xl">
+                <nav class="responsive-nav border-b extanded mb-2 -mt-2">
+                    <ul data-uk-switcher="connect: #sd; animation: uk-animation-fade">
+                        <li class="uk-active"><a class="active" href=""> All <span> 10 </span></a></li>
+                        <li><a href="">Your friends <span> 5 </span> </a></li>
+                    </ul>
+                </nav>
+                <div class="px-2 uk-switcher" id="sd">
+                    <div class="">
+                        @foreach($post->likes as $liker)
+                            <x-index.related-friend :user="$liker->user" :preview="false" />
+                        @endforeach
+                        
+                        <div class="flex justify-center ">
+                            <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
+                                Load more ...</a>{{-- TODO ajax load more likers --}}
+                        </div>
+                    </div>
+                    <div class="">
+                        xxxxxxxxx
+                    </div>
+                </div>
+            </div>
         </div>
+            
         <div class="border-t py-4 space-y-4 dark:border-gray-600">
             <x-index.post-comment />
             <x-index.post-comment />
         </div>
-
+        
         <a href="#" class="hover:text-blue-600 hover:underline"> Veiw 8 more Comments </a>
         <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
             <input placeholder="Add your Comment.." class="bg-transparent max-h-10 shadow-none px-5">

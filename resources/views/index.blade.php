@@ -50,12 +50,12 @@
                                 <a href="#" class="text-blue-600 "> See all</a>
                             </div>
                             <div>
-                                {{-- TODO: pass :user $user object with related friends idk how --}}
-                              <x-index.related-friend user="Andrzej Nowak"/>
-                              <x-index.related-friend user="Maciej Węgorz"/>
-                              <x-index.related-friend user="Adrian Byk"/>
-                              <x-index.related-friend user="Janusz Bebzela"/>
-                              <x-index.related-friend user="Michał Białek"/>
+                                {{-- TODO: pass :user $user object with related friends idk how 
+                              <x-index.related-friend />
+                              <x-index.related-friend />
+                              <x-index.related-friend />
+                              <x-index.related-friend />
+                              <x-index.related-friend />--}}
                             </div>
                         </div>
                       </div>

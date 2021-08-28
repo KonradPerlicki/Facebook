@@ -30,7 +30,8 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     ]);})->name('home');
 
     //ajax
-    Route::post('/like', [LikeController::class, 'manageLikes']);
+    Route::post('/like', [LikeController::class, 'manage_likes']);
+    Route::post('/load-all-likers', [LikeController::class, 'load_all_likers']);
 
     //profile
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
