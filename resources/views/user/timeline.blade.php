@@ -1,4 +1,4 @@
-<x-layout.layout :user="$user">
+<x-layout.layout >
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
@@ -43,6 +43,7 @@
                                 </svg>
                                 <span> Add Friend </span>
                             </a>
+                            {{--  TODO
                             <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100"> 
                               <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
                             </a>
@@ -51,7 +52,7 @@
                                 <ul class="space-y-1">
                                   <li> 
                                       <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <ion-icon name="star-outline"  class="pr-2 text-xl"></ion-icon>  Send Message 
+                                        <i class="uil-envelope mr-1 pr-2 text-xl"></i>  Send Message 
                                       </a> 
                                   </li>
                                   <li>
@@ -63,7 +64,7 @@
                                       </a> 
                                   </li>
                                 </ul>
-                            </div>
+                            </div>--}}
                             @endif          
                         </div>
                     </div>
@@ -74,13 +75,16 @@
                     <div class="md:flex md:space-x-6 lg:mx-16">
                         <div class="space-y-5 flex-shrink-0 md:w-7/12">
                            {{-- Create post form --}}
+                           @if($user == auth()->user())
                            <x-forms.create-post :user="$user"/>
+                           @endif
                             {{-- Posts TODO PAGINATION --}}
-
                             @foreach ($posts as $post)
                                 <x-index.post-card :post="$post"/>
                             @endforeach
-
+                            @if(!$posts->count())
+                                <div class="text-center italic text-gray-400 p-5">This user doesn't have any posts</div>
+                            @endif
                         </div>
                         <!-- Sidebar -->
                         <div class="w-full space-y-6">
@@ -174,104 +178,12 @@
                         </div>
 
                         <div class="grid md:grid-cols-2  grid-cols-2 gap-x-2 gap-y-4 mt-3"> 
-                             
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-3.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize">Graphic Design </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-4.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize"> Mountain Riders  </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-2.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize">  Coffee Addicts  </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-5.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize">  Property Rent  </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-1.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize"> Architecture </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-3.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize">Graphic Design </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-4.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize"> Mountain Riders  </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            <div class="flex items-center flex-col md:flex-row justify-center p-4 rounded-md shadow hover:shadow-md md:space-x-4">
-                                <a href="timeline-group.html" iv="" class="w-16 h-16 flex-shrink-0 overflow-hidden rounded-full relative">
-                                    <img src="assets/images/group/group-2.jpg" class="absolute w-full h-full inset-0 " alt="">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline-page.html" class="text-base font-semibold capitalize">  Coffee Addicts  </a>
-                                    <div class="text-sm text-gray-500"> 54 mutual friends </div>
-                                </div>
-                                <button class="bg-gray-100 font-semibold py-2 px-3 rounded-md text-sm md:mt-0 mt-3">
-                                    Following
-                                </button>
-                            </div>
-                            
+                            <x-user.page name="Graphic Design"/>
+                            <x-user.page name="Graphic Design"/>
+                            <x-user.page name="Graphic Design"/>
+                            <x-user.page name="Graphic Design"/>
+                            <x-user.page name="Graphic Design"/>
+                            <x-user.page name="Graphic Design"/>
                         </div>
 
                         <div class="flex justify-center mt-6">

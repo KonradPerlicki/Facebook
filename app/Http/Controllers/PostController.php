@@ -45,8 +45,6 @@ class PostController extends Controller
         if(isset($attributes['image'])) $attributes['image'] = $request->file('image')->store('public/posts');
         if(isset($attributes['video'])) $attributes['video'] = $request->file('video')->store('public/posts');
 
-        
-
         $post->update($attributes);
 
         return back()->with('status', 'Post updated successfully');

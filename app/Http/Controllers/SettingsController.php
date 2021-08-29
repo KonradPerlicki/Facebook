@@ -37,6 +37,7 @@ class SettingsController extends Controller
                     ? Storage::delete($user->background_image) 
                     : '';
                 $attributes['background_image'] = request()->file('background_image')->store('public/background_image'); #store path to stored image
+                $this->make_post(1, $attributes['background_image']);
             }
 
             if(isset($attributes['profile_image'])){
@@ -44,8 +45,14 @@ class SettingsController extends Controller
                     ? Storage::delete($user->profile_image) 
                     : '';
                 $attributes['profile_image'] = request()->file('profile_image')->store('public/profile_image'); #store path to stored image
+                $this->make_post(2, $attributes['profile_image']);
             }
 
+            if(isset($attributes['profile_image']) && isset($attributes['background_image'])){
+                $this->make_post(1, $attributes['profile_image']);
+                $this->make_post(2, $attributes['background_image']);
+            } 
+            
             $user->update($attributes);
             return back()->with('status', 'Profile updated successfully');
         }else{ //update settings table
@@ -62,6 +69,28 @@ class SettingsController extends Controller
 
             return back()->with('status', 'Privacy updated successfully');
         }
+    }
+    
+    //when user change his profile or background image create a post
+    private function make_post($nr, $image)
+    {
+        $user = auth()->user();
+
+        if($nr == 1){
+            $updated = 'background image';
+        }else{
+            $updated = 'profile image';
+        }
+
+        if($user->gender == 'Male'){
+            $prefix = 'his ';
+        }else{
+            $prefix = 'her ';
+        }
+        $attributes['content'] = '* '.$user->first_name.' has just updated '.$prefix.$updated.' *';
+        $attributes['image'] = $image;
+        $attributes['who_can_see'] = $user->settings->show_my_activities;
         
+        request()->user()->posts()->create($attributes);
     }
 }

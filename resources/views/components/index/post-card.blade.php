@@ -248,9 +248,17 @@
                 <div class="px-2 uk-switcher" id="sd">
                     <div class="">
                         @foreach($post->likes as $liker)
-                            <x-index.related-friend :user="$liker->user" :preview="false" />
+                        @if(isset($invites[$loop->index])){{-- TODO: ajax load users/BUG when current user dislike hes not removed from list  --}}
+                            @if($invites[$loop->index]->invitedBy(auth()->user()) && $invites[$loop->index]->receiver_id == $liker->user->id)
+                                <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
+                            @else
+                                <x-index.friend :user="$liker->user" :preview="false" />
+                            @endif
+                        @else
+                            <x-index.friend :user="$liker->user" :preview="false" />
+                        @endif
                         @endforeach
-                        
+                        {{-- TODO if 0 count dont show this instead show text no one liked yet --}}
                         <div class="flex justify-center ">
                             <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
                                 Load more ...</a>{{-- TODO ajax load more likers --}}

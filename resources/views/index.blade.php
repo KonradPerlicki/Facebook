@@ -2,7 +2,6 @@
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
-                
                 <!--  Feeds  -->
                 <div class="lg:flex lg:space-x-10">
                   <div class="lg:w-3/4 lg:px-20 space-y-7">
@@ -25,7 +24,7 @@
                       <x-forms.create-post :user="$user"/>
                       {{-- END: Create Post Section --}}
                       @foreach ($posts as $post)
-                          <x-index.post-card :post="$post"/>
+                          <x-index.post-card :post="$post" :invites="$invites"/>
                       @endforeach
                   </div>
                   {{-- START: Right column --}}
@@ -40,22 +39,19 @@
                           </div>
                       </a>
               
-                      <h3 class="text-xl font-semibold"> Contacts </h3>
+                      <h3 class="text-xl font-semibold"> Other Users </h3>
                       <div class="" uk-sticky="offset:80">
                         <div class="widget card p-5 border-t">
                             <div class="flex items-center justify-between mb-2">
                                 <div>
-                                    <h4 class="text-lg font-semibold"> Related  friends TODO max 8 lub 10</h4>
+                                    <h4 class="text-lg font-semibold"> all users TODO Related friends</h4>
                                 </div>
                                 <a href="#" class="text-blue-600 "> See all</a>
                             </div>
                             <div>
-                                {{-- TODO: pass :user $user object with related friends idk how 
-                              <x-index.related-friend />
-                              <x-index.related-friend />
-                              <x-index.related-friend />
-                              <x-index.related-friend />
-                              <x-index.related-friend />--}}
+                                @foreach (\App\Models\User::where('id','!=', auth()->id())->inRandomOrder()->take(8)->get() as $user)
+                                    <x-index.friend :user="$user" />
+                                @endforeach
                             </div>
                         </div>
                       </div>

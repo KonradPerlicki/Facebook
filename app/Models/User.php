@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $guarded = ['id'];
 
+    protected $with = ['settings', 'invites'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -51,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function invites()
+    {
+        return $this->hasMany(Invite::class,'sender_id');
     }
     
 }

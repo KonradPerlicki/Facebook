@@ -3,6 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Ajax\LikeController;
+use App\Http\Controllers\InviteController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
@@ -26,7 +27,8 @@ require __DIR__.'/auth.php';
 Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/', function () {return view('index', [
         'user' => auth()->user(),
-        'posts' => Post::latest()->get()
+        'posts' => Post::latest()->get(),
+        'invites' => auth()->user()->invites
     ]);})->name('home');
 
     //ajax
@@ -45,6 +47,11 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingsController::class, 'update']);
 
+    //friends
+    Route::post('/add-friend', [InviteController::class, 'store'])->name('add.friend');
+    Route::post('/remove-friend', [InviteController::class, 'destroy'])->name('remove.friend');
+
+    
     #Route::get('/pages', [PageController::class, 'index'])->name('pages');
     #Route::get('/videos', [VideoController::class, 'index'])->name('videos');
     Route::get('/groups', [GroupController::class, 'index'])->name('groups');
