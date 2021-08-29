@@ -11,7 +11,6 @@ class Post extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['author', 'likes']; //for eager loading
 
     public function author()
     {

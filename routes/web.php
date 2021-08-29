@@ -3,10 +3,12 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Ajax\LikeController;
-use App\Http\Controllers\InviteController;
+use App\Http\Controllers\Ajax\InviteController;
+use App\Http\Controllers\Ajax\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -27,18 +29,23 @@ require __DIR__.'/auth.php';
 Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/', function () {return view('index', [
         'user' => auth()->user(),
-        'posts' => Post::latest()->get(),
-        'invites' => auth()->user()->invites
+        'posts' => Post::with('author','likes')->latest()->get(),
     ]);})->name('home');
 
     //ajax
     Route::post('/like', [LikeController::class, 'manage_likes']);
     Route::post('/load-all-likers', [LikeController::class, 'load_all_likers']);
+    Route::post('/mark-as-read', [NotificationController::class, 'mark_as_read']);
+    //ajax - sending invites
+    Route::post('/add-friend-invite', [InviteController::class, 'store'])->name('add.friend');
+    Route::post('/remove-friend-invite', [InviteController::class, 'destroy'])->name('remove.friend');
+
 
     //profile
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
     
     //post
+    Route::get('/post/{id}',[PostController::class, 'show'])->name('post.show');
     Route::post('/post',[PostController::class, 'store'])->name('post.create');
     Route::put('/post/{id}',[PostController::class, 'update'])->name('post.update');
     Route::delete('/post/{id}',[PostController::class, 'destroy'])->name('post.destroy');
@@ -47,11 +54,10 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingsController::class, 'update']);
 
-    //friends
-    Route::post('/add-friend', [InviteController::class, 'store'])->name('add.friend');
-    Route::post('/remove-friend', [InviteController::class, 'destroy'])->name('remove.friend');
 
-    
+
+
+
     #Route::get('/pages', [PageController::class, 'index'])->name('pages');
     #Route::get('/videos', [VideoController::class, 'index'])->name('videos');
     Route::get('/groups', [GroupController::class, 'index'])->name('groups');

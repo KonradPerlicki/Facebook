@@ -412,7 +412,6 @@ fieldset {
 }
 
 button {
-  border: none;
   margin: 0;
   padding: 0;
   width: auto;
@@ -6772,7 +6771,7 @@ header .header_inner .right_side {
 }
 
 .header_dropdown {
-  width: 340px;
+  width: 450px;
   margin-top: 50px;
   border-radius: 5px;
   padding: 10px;
@@ -6920,8 +6919,6 @@ header .header_inner .right_side {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  background-color: #f2f2f2;
-  background: linear-gradient(80deg, #78a6fc, #3576ef 100%) !important;
   color: white;
   margin-top: 25px;
   margin-left: 25px;

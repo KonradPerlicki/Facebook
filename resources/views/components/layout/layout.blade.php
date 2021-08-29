@@ -1,4 +1,8 @@
-@props(['styles' =>'' , 'index' => '' , 'scripts' => '' ,'title' => 'Nasza Klasa' , 'showSideBar' => true, 'user' => auth()->user()])
+@props(['styles' =>'' ,
+'index' => '' , 'scripts' => '' ,'title' => 'Facebook' , 
+'showSideBar' => true, 'user' => auth()->user(), 
+'notifications' => \App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('id')->get(),
+])
 {{-- START: OPENING PAGE 
 ================================================================
 --}}
@@ -30,7 +34,7 @@
 <body>
     <div id="wrapper" {{ $attributes }}>
     @if($showSideBar)
-        <x-layout.top-bar :user="$user" /> {{-- Top Bar and Sidebar --}}
+        <x-layout.top-bar :user="$user" :notifications="$notifications" /> {{-- Top Bar and Sidebar --}}
         {{-- END: OPENING PAGE 
         ================================================================
         --}}
@@ -138,9 +142,25 @@
         </script>
 
 
+<script>
+    function mark_as_read(id)
+    {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            'url':'mark-as-read',
+            'type': 'POST',
+            'data':{id:id},
+            success: function(){
+                $('#notifications').remove()
+            }
+        })
+    }
+</script>
 
-
-<script src="{{ asset('assets/js/ajaxLiking.js') }}"></script>{{-- TODO look inside file --}}
         <!-- Javascript
         ================================================== -->
         <script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>
@@ -151,6 +171,8 @@
         <script src="{{ asset('assets/js/bootstrap-select.min.js') }}"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="{{ asset('assets/js/ajaxLiking.js') }}"></script>{{-- TODO look inside file --}}
+        <script src="{{ asset('assets/js/ajaxSendFriendsInvite.js') }}"></script>
         {{ $scripts }}
 </body>
 

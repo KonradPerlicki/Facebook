@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Models\Like;
+use App\Models\Notification;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class LikeController extends Controller
@@ -17,10 +15,12 @@ class LikeController extends Controller
         #todo send notification when first liked
         $post = Post::find(request()->id);#request()->id
         $likes = $post->likes->count()-1;
-
+        
         #if already liked
         if($post->likedBy(request()->user())){
             request()->user()->likes()->where('post_id', $post->id)->delete();
+            Notification::withoutTrashed()->where('from_user_id', auth()->id())
+            ->where('to_user_id', request()->author_id)->delete();
             $post = Post::find(request()->id);
             if($likes > 0){
                 $last_user = $post->likes->reverse()->first()->user; //first user from the end
@@ -34,6 +34,19 @@ class LikeController extends Controller
             request()->user()->likes()->create([
                 'post_id' => request()->id
             ]);
+
+            if($notification = Notification::onlyTrashed()->where('from_user_id', auth()->id())
+            ->where('to_user_id', request()->author_id)->first()){
+                $notification->restore();
+            }else{
+                request()->user()->notifications()->create([
+                    'to_user_id' => request()->author_id,
+                    'content' => ' has liked your post.',
+                    'additional_id' => request()->id,
+                    'type' => 'like'
+                ]);
+            }
+            
             $post = Post::find(request()->id);
             $current_user = auth()->user();
             $likes++;

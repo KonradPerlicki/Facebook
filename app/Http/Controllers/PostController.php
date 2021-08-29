@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    public function show($id)
+    {
+        $post = Post::with('author','likes')->find($id);
+        return view('single-post', [
+            'user' => auth()->user(),
+            'post' => $post
+        ]);
+    }
+
     public function store(PostRequest $request)
     {
         $attributes = $request->validated();

@@ -175,14 +175,14 @@
     <div class="p-4 space-y-3">
         <div class="flex space-x-4 lg:font-bold">
             @if ($post->likedBy(auth()->user()))
-            <div onclick="msg({{ $post->id }})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
+            <div onclick="like({{ $post->id.','.$post->author->id}})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
                 <div class="p-2 pt-3 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600 ">
                     <ion-icon id="like-icon{{ $post->id }}" name="thumbs-up" class="w-5 h-5 text-blue-500 @if($post->likedBy(auth()->user())) text-blue-500 @endif"></ion-icon>
                 </div>
                 <div id="like{{ $post->id }}" > Unlike</div>
             </div>
             @else
-                <div onclick="msg({{ $post->id }})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
+                <div onclick="like({{ $post->id.','.$post->author->id }})" class="flex items-center space-x-2 cursor-pointer hover:text-blue-700">
                     <div class="p-2 pt-3 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600 ">
                         <ion-icon id="like-icon{{ $post->id }}" name="thumbs-up" class="w-5 h-5"></ion-icon>
                     </div>

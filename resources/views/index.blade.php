@@ -24,7 +24,7 @@
                       <x-forms.create-post :user="$user"/>
                       {{-- END: Create Post Section --}}
                       @foreach ($posts as $post)
-                          <x-index.post-card :post="$post" :invites="$invites"/>
+                          <x-index.post-card :post="$post" :invites="$user->invites"/>
                       @endforeach
                   </div>
                   {{-- START: Right column --}}

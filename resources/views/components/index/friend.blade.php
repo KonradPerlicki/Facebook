@@ -31,7 +31,9 @@
         <div class="contact-username mt-2">{{$user->first_name.' '.$user->last_name}}</div>
         <p class="-mt-1"> 
             <span class="text-gray-400">{{'@'.$user->username }}</span>
-            <hr class="my-1">
+            @if($user->about_me)
+                <hr class="my-1">
+            @endif
             <p>{{ $user->about_me }}</p>
             {{--TODO maybe in future add this instead about me <ion-icon name="people" class="text-lg mr-1"></ion-icon> Become friends with 
             <strong> Stella Johnson </strong> and <strong> 14 Others</strong> --}}
