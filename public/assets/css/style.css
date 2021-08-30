@@ -6771,7 +6771,6 @@ header .header_inner .right_side {
 }
 
 .header_dropdown {
-  width: 450px;
   margin-top: 50px;
   border-radius: 5px;
   padding: 10px;
@@ -7004,7 +7003,6 @@ header .header_inner .right_side {
 .header_dropdown .dropdown_scrollbar {
   display: block;
   width: 100%;
-  max-height: 37vw  !important;
   padding-right: 14px;
 }
 

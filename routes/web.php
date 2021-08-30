@@ -5,10 +5,10 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Ajax\LikeController;
 use App\Http\Controllers\Ajax\InviteController;
 use App\Http\Controllers\Ajax\NotificationController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
-use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -29,16 +29,21 @@ require __DIR__.'/auth.php';
 Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/', function () {return view('index', [
         'user' => auth()->user(),
-        'posts' => Post::with('author','likes')->latest()->get(),
+        'posts' => Post::with('author','likes')->latest()->paginate(8),
     ]);})->name('home');
 
     //ajax
     Route::post('/like', [LikeController::class, 'manage_likes']);
     Route::post('/load-all-likers', [LikeController::class, 'load_all_likers']);
+    //notifications 
     Route::post('/mark-as-read', [NotificationController::class, 'mark_as_read']);
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     //ajax - sending invites
-    Route::post('/add-friend-invite', [InviteController::class, 'store'])->name('add.friend');
-    Route::post('/remove-friend-invite', [InviteController::class, 'destroy'])->name('remove.friend');
+    Route::post('/add-friend-invite', [InviteController::class, 'store']);
+    Route::post('/remove-friend-invite', [InviteController::class, 'destroy']);
+    //ajax - accepting/rejecting friend requests
+    Route::post('/friend-accept',[FriendController::class, 'store']);
+    Route::post('/friend-decline',[FriendController::class, 'destroy']);
 
 
     //profile
@@ -55,6 +60,7 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::put('/settings', [SettingsController::class, 'update']);
 
 
+    
 
 
 

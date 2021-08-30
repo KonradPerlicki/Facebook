@@ -37,12 +37,24 @@
                                 <span> Add Your Story </span>
                             </a>
                             @else {{-- TODO:adding users and change dropdown --}}
-                            <a href="#" class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span> Add Friend </span>
-                            </a>
+                                @foreach (auth()->user()->invites as $invite)
+                                    @if ($sent = $invite->invitedBy(auth()->user()) && $invite->receiver_id==$user->id)
+                                    <button id="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }}, true)"
+                                        class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                            <span> Sent &check; </span>
+                                        </button>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if(!$sent)
+                                <button id="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }}, true)"
+                                    class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span> Add Friend </span>
+                                    </button>
+                                @endif
                             {{--  TODO
                             <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100"> 
                               <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>

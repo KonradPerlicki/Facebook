@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ajax;
 
+use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 
@@ -13,5 +14,13 @@ class NotificationController extends Controller
     {
         Notification::withoutTrashed()->where('to_user_id', request()->id)
         ->where('seen',false)->update(['seen' => true]);
+    }
+
+    public function index()
+    {
+        return view('notifications',[
+            'user' => auth()->user(),
+            'notifications' => Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('updated_at')->paginate(15)
+        ]);
     }
 }

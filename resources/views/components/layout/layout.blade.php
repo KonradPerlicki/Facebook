@@ -1,7 +1,7 @@
 @props(['styles' =>'' ,
 'index' => '' , 'scripts' => '' ,'title' => 'Facebook' , 
 'showSideBar' => true, 'user' => auth()->user(), 
-'notifications' => \App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('id')->get(),
+'notifications' => \App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('updated_at')->take(8)->get(),
 ])
 {{-- START: OPENING PAGE 
 ================================================================
@@ -78,8 +78,8 @@
                 </div>
                 <nav class="responsive-nav border-b extanded mb-2 -mt-2">
                     <ul uk-switcher="connect: #chats-tab; animation: uk-animation-fade">
-                        <li class="uk-active"><a class="active" href="#0"> Friends </a></li>
-                        <li><a href="#0">Groups <span> 10 </span> </a></li>
+                        <li class="uk-active"><a class="active" href="#"> Friends </a></li>
+                        <li><a href="#">Groups <span> 10 </span> </a></li>
                     </ul>
                 </nav>
                 <div class="contact-list px-2 uk-switcher" id="chats-tab">
@@ -142,24 +142,6 @@
         </script>
 
 
-<script>
-    function mark_as_read(id)
-    {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            'url':'mark-as-read',
-            'type': 'POST',
-            'data':{id:id},
-            success: function(){
-                $('#notifications').remove()
-            }
-        })
-    }
-</script>
 
         <!-- Javascript
         ================================================== -->
@@ -173,6 +155,7 @@
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script src="{{ asset('assets/js/ajaxLiking.js') }}"></script>{{-- TODO look inside file --}}
         <script src="{{ asset('assets/js/ajaxSendFriendsInvite.js') }}"></script>
+        <script src="{{ asset('assets/js/ajaxNotifications.js') }}"></script>
         {{ $scripts }}
 </body>
 

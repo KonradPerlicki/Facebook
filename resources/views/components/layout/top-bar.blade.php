@@ -90,21 +90,19 @@
                             <span id="notifications">{{ $count }}</span>
                         @endif
                     </a>
-                    <div uk-drop="mode: click" class="header_dropdown">
-                         <div  class="dropdown_scrollbar" data-simplebar>
+                    <div uk-drop="mode: click" class="header_dropdown w-96">
+                         <div  class="dropdown_scrollbar max-h-96 pb-3" data-simplebar>
                              <div class="drop_headline">
-                                 <h4>Notifications </h4>
-                                 <div class="btn_action">
+                                 <h4>Latest Notifications </h4>
+                                    <a href="{{ route('notifications') }}" class="text-blue-500 hover:underline">See All</a>
                                      {{-- TODO maybe add this and in settings add something
                                     <a href="#" data-tippy-placement="left" title="Notifications">
                                         <ion-icon name="settings-outline"></ion-icon>
                                     </a>--}}
-                                </div>
                              </div>
                              <ul>
                                 @foreach ($notifications as $notification)
                                     <x-layout.top-bar.notification :notification="$notification" />
-                                        
                                 @endforeach
                              </ul> 
                          </div>

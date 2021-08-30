@@ -6,4 +6,12 @@
 <span class="drop_icon bg-purple-400">
     <i class="icon-feather-thumbs-up"></i>
 </span>
+@elseif($type == 'accepted')
+<span class="drop_icon bg-green-400">
+    <ion-icon name="people"></ion-icon>
+</span>
+@elseif($type == 'rejected')
+<span class="drop_icon bg-red-400">
+    <ion-icon name="people"></ion-icon>
+</span>
 @endif

@@ -10,7 +10,6 @@
         <div class="text-xs text-gray-500 mt-0.5"> <b>12 mutual</b> friends</div>
         @endif
     </div>
-    
     @if($user != auth()->user())
     <div class="flex items-center justify-center h-8 px-3 rounded-md text-sm border font-semibold bg-blue-500 text-white" >
         @if ($invited)

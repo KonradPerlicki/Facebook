@@ -3,7 +3,6 @@
         <div class="drop_avatar" onclick="window.location='{{ route('profile', $notification->from->username) }}'"> 
             <img src="{{ Storage::url($notification->from->profile_image) }}" alt="" class="cursor-pointer">
         </div>
-    
         <x-layout.top-bar.notify-icon :type="$notification->type"/>
         <div class="drop_text">
             <p>
@@ -11,7 +10,7 @@
                     {{ $notification->from->first_name.' '.$notification->from->last_name }}
                 </strong>
                 
-               <span class="text-link">{{ $notification->content }}</span>
+               {{ $notification->content }}
             </p>
             <time> {{ $notification->updated_at->diffForHumans() }} </time>
         </div>
@@ -20,16 +19,23 @@
                 <button type="submit">See Post</button>
             </form>
         @elseif ($notification->type == 'friend')
-        <div>
-            <form method="POST" action="">
-                @csrf
-                <button type="submit" class="z-50 w-full bg-blue-500 hover:bg-blue-600 text-white rounded-md p-1 ml-1">Accept &check;</button>
-            </form>
-            <form method="POST" action="">
-                @csrf
-                <button type="submit" class="z-50 w-full border mt-0.5 border-gray-600 hover:bg-gray-300 rounded-md p-1 ml-1">Decline &#x2715;</button>
-            </form>
-        </div>
+            @if($notification->additional_id==2)
+                <div class="my-auto">
+                    <button class="z-50 bg-blue-600 cursor-default text-white rounded-md p-1 ml-1">Accepted &check;</button>
+                </div>
+            @elseif($notification->additional_id==1)
+                <div class="my-auto">
+                    <button class="z-50 bg-gray-200 border border-gray-600 cursor-default rounded-md p-1 ml-1">Declined &#x2715;</button>            
+                </div>
+            @else
+            <div id="form{{ $notification->id }}">
+                <button onclick="friend_accept({{ $notification->from->id.','.$notification->id }})" 
+                    class="z-50 w-full bg-blue-500 hover:bg-blue-600 text-white rounded-md p-1 ml-1">Accept &check;</button>
+                <br>
+                <button onclick="friend_decline({{ $notification->from->id.','.$notification->id }})"
+                class="z-50 w-full border mt-0.5 border-gray-600 hover:bg-gray-300 rounded-md p-1 ml-1">Decline &#x2715;</button>
+            </div>
+            @endif
         @endif
     </a>
     
