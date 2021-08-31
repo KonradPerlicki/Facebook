@@ -5,7 +5,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Ajax\LikeController;
 use App\Http\Controllers\Ajax\InviteController;
 use App\Http\Controllers\Ajax\NotificationController;
-use App\Http\Controllers\FriendController;
+use App\Http\Controllers\Ajax\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
@@ -34,7 +34,6 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
 
     //ajax
     Route::post('/like', [LikeController::class, 'manage_likes']);
-    Route::post('/load-all-likers', [LikeController::class, 'load_all_likers']);
     //notifications 
     Route::post('/mark-as-read', [NotificationController::class, 'mark_as_read']);
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
@@ -44,6 +43,8 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     //ajax - accepting/rejecting friend requests
     Route::post('/friend-accept',[FriendController::class, 'store']);
     Route::post('/friend-decline',[FriendController::class, 'destroy']);
+    //unfriend
+    Route::post('/friend-remove/{id}',[FriendController::class, 'unfriend'])->name('unfriend');
 
 
     //profile
@@ -54,6 +55,8 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::post('/post',[PostController::class, 'store'])->name('post.create');
     Route::put('/post/{id}',[PostController::class, 'update'])->name('post.update');
     Route::delete('/post/{id}',[PostController::class, 'destroy'])->name('post.destroy');
+    Route::post('/post-allow-comments', [PostController::class, 'allow_comments']);
+    Route::post('/post-disable-comments', [PostController::class, 'disable_comments']);
 
     //settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');

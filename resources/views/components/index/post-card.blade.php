@@ -120,9 +120,15 @@
                         </x-modal>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                        @if($post->allow_comments)
+                        <a id="comments-switch{{ $post->id }}" onclick="comments_switch({{ $post->id }},false)" href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                             <i class="uil-comment-slash mr-1"></i> Disable comments
                         </a>
+                        @else
+                        <a id="comments-switch{{ $post->id }}" onclick="comments_switch({{ $post->id }},true)" href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                            <i class="uil-comment mr-1"></i> Enable comments
+                        </a>
+                        @endif
                     </li>
                     <li>
                         <hr class="-mx-2 my-2 dark:border-gray-800">
@@ -211,7 +217,7 @@
                 <div> Share</div>
             </a>
         </div>
-        <a id="like-section{{ $post->id }}" href="#all-likers{{ $post->id }}" uk-toggle class="flex items-center space-x-3 pt-2 hover:underline cursor-pointer"> 
+        <a id="like-section{{ $post->id }}" uk-toggle="target:#all-likers{{ $post->id }}" class="flex items-center space-x-3 pt-2 hover:underline cursor-pointer"> 
             <div id="likers-images{{ $post->id }}" class="flex items-center">{{-- TODO maybe on click display modal with all users who like and columns for mutual and not mutual --}}
                 @foreach ($post->likes->take(-3) as $liker) {{-- -3 means 3 from the end --}}              
                     @if($loop->iteration > 3 )
@@ -237,35 +243,57 @@
                 @endif
             </div>
         </a>
-        <div id="all-likers{{ $post->id }}" uk-offcanvas>
-            <div class="uk-offcanvas-bar bg-white p-0 w-full lg:w-80 shadow-2xl">
-                <nav class="responsive-nav border-b extanded mb-2 -mt-2">
-                    <ul data-uk-switcher="connect: #sd; animation: uk-animation-fade">
-                        <li class="uk-active"><a class="active" href=""> All <span> 10 </span></a></li>
-                        <li><a href="">Your friends <span> 5 </span> </a></li>
-                    </ul>
-                </nav>
-                <div class="px-2 uk-switcher" id="sd">
-                    <div class="">
+        <div id="all-likers{{ $post->id }}" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <h2 class="uk-modal-title">
+                    <nav class="responsive-nav border-b extanded mb-2 -mt-2">
+                        <ul uk-switcher="connect: #likers{{ $post->id }}; animation: uk-animation-fade">
+                            <li class="uk-active"><a class="active" href="#"> All <span> {{ $post->likes->count() }} </span></a></li>
+                            <li><a href="#">Your friends <span> 
+                                @php $i=0; @endphp
+                                @foreach ($post->likes as $liker)
+                                    @if($liker->user->friendWith(auth()->user()))
+                                        @php $i++; @endphp
+                                    @endif
+                                @endforeach
+                                {{ $i }}
+                            </span> </a></li>
+                        </ul>
+                    </nav>
+                </h2>
+                <div class="px-2 uk-switcher" id="likers{{ $post->id }}">
+                    <div>
                         @foreach($post->likes as $liker)
-                        @if(isset($invites[$loop->index])){{-- TODO: ajax load users/BUG when current user dislike hes not removed from list  --}}
-                            @if($invites[$loop->index]->invitedBy(auth()->user()) && $invites[$loop->index]->receiver_id == $liker->user->id)
-                                <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
-                            @else
-                                <x-index.friend :user="$liker->user" :preview="false" />
+                        {{-- TODO: ajax load users/BUG when current user dislike hes not removed from list  --}}
+                            @if(isset($invites[$loop->index])) {{-- check if index in invites exists  --}}
+                                {{-- Check if current user in loop is invited by logged in user--}}
+                                @if($invites[$loop->index]->invitedBy(auth()->user()) && $invites[$loop->index]->receiver_id == $liker->user->id)
+                                    <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
+                                @elseif($liker->user->friendWith(auth()->user())) {{-- not invited --}}
+                                    <x-index.friend :user="$liker->user" :preview="false" :friends="true"/>
+                                @else
+                                    <x-index.friend :user="$liker->user" :preview="false" />
+                                @endif
                             @endif
-                        @else
-                            <x-index.friend :user="$liker->user" :preview="false" />
-                        @endif
                         @endforeach
-                        {{-- TODO if 0 count dont show this instead show text no one liked yet --}}
-                        <div class="flex justify-center ">
-                            <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
-                                Load more ...</a>{{-- TODO ajax load more likers --}}
-                        </div>
+                        @if(!$post->likes->count()){{-- THIS SHOULD BE DONE IN OTHER WAY - loading all likers for every post is bad --}}
+                            <div class="text-lg text-center pt-3 text-gray-400">
+                                No one liked this post yet.
+                            </div>
+                        @endif
                     </div>
-                    <div class="">
-                        xxxxxxxxx
+                    <div>
+                        @foreach($post->likes as $liker)
+                            @if($liker->user->friendWith(auth()->user()))
+                                <x-index.friend :user="$liker->user" :preview="false" :friends="true"/>
+                            @endif
+                        @endforeach
+                        @if ($i==0)
+                            <div class="text-lg text-center pt-3 text-gray-400">
+                                No one from your friends liked this post.
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

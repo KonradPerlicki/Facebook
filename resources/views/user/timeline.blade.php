@@ -2,6 +2,9 @@
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
+                <!-- Session Status -->
+                <x-flash-messages.auth-session-status class="mb-8 p-4 bg-green-100 rounded-xl" :status="session('status')" />
+                
                 {{-- Top section --}}
                 <div class="profile user-profile">
                     <div class="profiles_banner">
@@ -37,46 +40,54 @@
                                 <span> Add Your Story </span>
                             </a>
                             @else {{-- TODO:adding users and change dropdown --}}
-                                @foreach (auth()->user()->invites as $invite)
-                                    @if ($sent = $invite->invitedBy(auth()->user()) && $invite->receiver_id==$user->id)
-                                    <button id="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }}, true)"
+                                @if($user->friendWith(auth()->user()))
+                                <div class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                    <span>Friends &check; </span>
+                                </div>
+                                <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100"> 
+                                    <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
+                                </a>
+                                <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"  
+                                uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
+                                    <ul class="space-y-1">
+                                        <li> 
+                                            <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                <i class="uil-envelope mr-1 pr-2 text-xl"></i>  Send Message 
+                                            </a> 
+                                        </li>
+                                        <li>
+                                            <hr class="-mx-2 my-2 dark:border-gray-800">
+                                        </li>
+                                        <li> 
+                                            <form method="POST" action="{{ route('unfriend', $user->id) }}" class="text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                                @csrf
+                                                <button type="submit" class="w-full px-3 py-2 text-left">
+                                                    <ion-icon name="stop-circle-outline" class="pr-2 text-xl align-middle"></ion-icon>  Unfriend
+                                                </button>
+                                            </form> 
+                                        </li>
+                                    </ul>
+                                </div>
+                                @else
+                                    @foreach (auth()->user()->invites as $invite)
+                                        @if ($sent = $invite->invitedBy(auth()->user()) && $invite->receiver_id==$user->id)
+                                        <button id="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }}, true)"
+                                            class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                                <span> Sent &check; </span>
+                                            </button>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                    @if(!$sent)
+                                    <button id="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }}, true)"
                                         class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
-                                            <span> Sent &check; </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span> Add Friend </span>
                                         </button>
-                                        @break
                                     @endif
-                                @endforeach
-                                @if(!$sent)
-                                <button id="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }}, true)"
-                                    class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span> Add Friend </span>
-                                    </button>
                                 @endif
-                            {{--  TODO
-                            <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100"> 
-                              <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
-                            </a>
-                            <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"  
-                            uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
-                                <ul class="space-y-1">
-                                  <li> 
-                                      <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <i class="uil-envelope mr-1 pr-2 text-xl"></i>  Send Message 
-                                      </a> 
-                                  </li>
-                                  <li>
-                                    <hr class="-mx-2 my-2 dark:border-gray-800">
-                                  </li>
-                                  <li> 
-                                      <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                                        <ion-icon name="stop-circle-outline" class="pr-2 text-xl"></ion-icon>  Unfriend
-                                      </a> 
-                                  </li>
-                                </ul>
-                            </div>--}}
                             @endif          
                         </div>
                     </div>

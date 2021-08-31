@@ -12,6 +12,9 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with('author','likes')->find($id);
+        if(!$post){
+            abort(404);
+        }
         return view('single-post', [
             'user' => auth()->user(),
             'post' => $post
@@ -64,5 +67,15 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->delete();
         return back()->with('status', 'Post deleted successfully');
+    }
+
+    public function allow_comments()
+    {
+        Post::find(request()->post_id)->update(['allow_comments'=>true]);
+    }
+
+    public function disable_comments()
+    {
+        Post::find(request()->post_id)->update(['allow_comments'=>false]);
     }
 }

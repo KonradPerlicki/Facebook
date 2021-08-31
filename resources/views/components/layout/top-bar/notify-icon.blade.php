@@ -14,4 +14,8 @@
 <span class="drop_icon bg-red-400">
     <ion-icon name="people"></ion-icon>
 </span>
+@elseif($type == 'unfriend')
+<span class="drop_icon bg-gray-800">
+    <ion-icon name="trash-outline"></ion-icon>
+</span>
 @endif

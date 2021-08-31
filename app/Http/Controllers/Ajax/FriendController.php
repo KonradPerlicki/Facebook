@@ -56,4 +56,16 @@ class FriendController extends Controller
             'type' => 'rejected'
         ]);
     }
+
+    public function unfriend($id)
+    {
+        Friend::where('user_id',$id)->where('friend_id',auth()->id())->delete();
+        Friend::where('friend_id',$id)->where('user_id',auth()->id())->delete();
+        request()->user()->notifications()->create([
+            'to_user_id' => $id,
+            'content' => 'has removed you from friend list',
+            'type' => 'unfriend'
+        ]);
+        return back()->with('status', 'Friend removed successfully');
+    }
 }

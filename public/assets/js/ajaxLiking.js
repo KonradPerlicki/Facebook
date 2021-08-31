@@ -55,24 +55,3 @@
             },
         })
     }
-
-    
-
-    //TODO ajax insert liker to slide out modal list
-    function show_likers(id)
-    {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            'type' : 'POST',
-            'url':'/all-likerss',
-            'dataType':'json',
-            'data' :{id:id},
-            success:function(data){
-                console.log(data.html)
-            }
-        })
-    }

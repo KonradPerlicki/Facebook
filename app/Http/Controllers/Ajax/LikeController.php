@@ -65,10 +65,4 @@ class LikeController extends Controller
             'last_user' => isset($last_user) ? $last_user : $current_user
         ],200);
     }
-
-    public function load_all_likers()
-    {
-
-    }
-
 }

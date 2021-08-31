@@ -22,6 +22,7 @@ class CreatePostsTable extends Migration
             #$table->string('friends')->nullable(); TODO
             #$table->string('feeling')->nullable();
             $table->tinyInteger('who_can_see')->default('2');
+            $table->boolean('allow_comments')->default(true);
             $table->timestamps();
         });
     }

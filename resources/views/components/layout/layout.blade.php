@@ -39,8 +39,9 @@
         ================================================================
         --}}
     @endif
-        {{ $slot }}
 
+    {{ $slot }}
+    
     </div>
     @if($showSideBar)
         {{-- START: CLOSING PAGE 
@@ -141,7 +142,37 @@
     })(window, document);
         </script>
 
-
+<script>
+    function comments_switch(post_id, action)
+    {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        if(action){//enable comments
+            $.ajax({
+                'url':'post-allow-comments',
+                'method': 'POST',
+                'data':{post_id:post_id},
+                'success': function(){
+                    $('#comments-switch'+post_id).html('<i class="uil-comment-slash mr-1"></i> Disable comments')
+                    $('#comments-switch'+post_id).attr('onclick','comments_switch('+post_id+',false)')
+                }
+            })
+        }else{ //disable comments
+            $.ajax({
+                'url':'post-disable-comments',
+                'method': 'POST',
+                'data':{post_id:post_id},
+                'success': function(){
+                    $('#comments-switch'+post_id).html('<i class="uil-comment mr-1"></i> Enable comments')
+                    $('#comments-switch'+post_id).attr('onclick','comments_switch('+post_id+',true)')
+                }
+            })
+        }
+    }
+</script>
 
         <!-- Javascript
         ================================================== -->
