@@ -35,9 +35,15 @@
                                 <input name="last_name" type="text" placeholder="Last  Name" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('last_name') border-2 border-red-500 @enderror" required value="{{ old('last_name') }}">
                             </div>
                         </div>
-                        <div>
-                            <label class="mb-0 @error('username') text-red-500 @enderror"> Username </label>
-                            <input name="username" type="text" placeholder="Username" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('username') border-2 border-red-500 @enderror" required value="{{ old('username') }}">
+                        <div class="grid lg:grid-cols-2 gap-3">
+                            <div>
+                                <label class="mb-0 @error('username') text-red-500 @enderror"> Username </label>
+                                <input name="username" type="text" placeholder="Username" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('username') border-2 border-red-500 @enderror" required value="{{ old('username') }}">
+                            </div>
+                            <div>
+                                <label class="mb-0 @error('date') text-red-500 @enderror"> Date of birth </label>
+                                <input name="birth_date" min="1900-01-01" max="2021-12-31" type="date" placeholder="Date of birth" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('date') border-2 border-red-500 @enderror" required value="{{ old('date') }}">
+                            </div>
                         </div>
                         <div>
                             <label class="mb-0 @error('email') text-red-500 @enderror"> Email Address </label>

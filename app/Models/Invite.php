@@ -17,9 +17,4 @@ class Invite extends Model
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    //check if current user already sent invite to selected user
-    public function invitedBy(User $user)
-    {
-        return $user->invites->contains('sender_id', $user->id);
-    }
 }

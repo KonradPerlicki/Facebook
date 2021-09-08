@@ -11,7 +11,7 @@ class ProfileController extends Controller
 {
     public function show(User $user)
     {
-        $posts = Post::where('user_id', $user->id)->get();
+        $posts = Post::where('user_id', $user->id)->latest()->paginate(6);
         #$likes = Like::with('user')->where('user_id',auth()->id())->get(); this shows posts liked by that user
         return view('user.timeline', [
             'user' => $user,

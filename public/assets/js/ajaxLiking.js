@@ -49,6 +49,8 @@
                     $('#last-liker'+id).html(data.all_likes[images.length-1].user.first_name + ' ' +data.all_likes[images.length-1].user.last_name) //index 2 because it is third and last element from array
                     if(data.likes == 0){
                         $('#likes'+id).remove()
+                    }else if(data.all_likes.length >= 2){
+                        $('#likes'+id).html(' and <strong> '+data.likes+' '+data.other+'</strong>')
                     }
                 }
                 $('#likers-images'+id).html(images)

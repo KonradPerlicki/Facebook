@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NotificationFactory extends Factory
@@ -22,7 +23,9 @@ class NotificationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'from_user_id' => User::all()->random()->id,
+            'from_user_id' => User::all()->random()->id,
+            'content' => $this->faker->randomElement([' has liked your post.',' sent you a friend request']),
         ];
     }
 }

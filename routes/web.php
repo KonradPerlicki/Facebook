@@ -29,7 +29,7 @@ require __DIR__.'/auth.php';
 Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/', function () {return view('index', [
         'user' => auth()->user(),
-        'posts' => Post::with('author','likes')->latest()->paginate(8),
+        'posts' => Post::with('author','likes')->latest()->paginate(6),
     ]);})->name('home');
 
     //ajax

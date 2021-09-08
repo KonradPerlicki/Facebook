@@ -209,15 +209,13 @@
                                 <span class="uk-switch-button"></span>
                             </span>
                         </a>
-                        <a href="#">
+                        <form method="POST" id="logout" action="{{ route('logout') }}">
+                        @csrf
+                            <a href="#" onclick="document.getElementById('logout').submit()">
                             <x-layout.top-bar.svg name="logout"/>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit">
-                                    {{ __('Log Out') }}
-                                </button>
-                            </form>
-                        </a>
+                                {{ __('Log Out') }}
+                            </a>
+                        </form>
                     </div>
                     {{-- END: Account image --}}
                 </div>

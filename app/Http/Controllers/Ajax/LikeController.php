@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Models\Like;
 use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -16,9 +17,9 @@ class LikeController extends Controller
         $post = Post::find(request()->id);#request()->id
         $likes = $post->likes->count()-1;
         
-        #if already liked
+        #when disliking
         if($post->likedBy(request()->user())){
-            request()->user()->likes()->where('post_id', $post->id)->delete();
+            request()->user()->likes()->where('post_id', $post->id)->first()->delete();
             Notification::withoutTrashed()->where('from_user_id', auth()->id())
             ->where('to_user_id', request()->author_id)->delete();
             $post = Post::find(request()->id);
@@ -30,21 +31,27 @@ class LikeController extends Controller
             $likes--;
             $txt = 'Like';
             $filled = false;
-        }else{ #if not liked
-            request()->user()->likes()->create([
-                'post_id' => request()->id
-            ]);
-
-            if($notification = Notification::onlyTrashed()->where('from_user_id', auth()->id())
-            ->where('to_user_id', request()->author_id)->first()){
-                $notification->restore();
+        }else{ #when liking
+            if($like = Like::onlyTrashed()->where('user_id', auth()->id())->where('post_id', request()->id)->first()){
+                $like->restore();
             }else{
-                request()->user()->notifications()->create([
-                    'to_user_id' => request()->author_id,
-                    'content' => ' has liked your post.',
-                    'additional_id' => request()->id,
-                    'type' => 'like'
+                request()->user()->likes()->create([
+                    'post_id' => request()->id
                 ]);
+            }
+            
+            if(request()->author_id != auth()->id()){
+                if($notification = Notification::onlyTrashed()->where('from_user_id', auth()->id())
+                ->where('to_user_id', request()->author_id)->first()){
+                    $notification->restore();
+                }else{
+                    request()->user()->notifications()->create([
+                        'to_user_id' => request()->author_id,
+                        'content' => ' has liked your post.',
+                        'additional_id' => request()->id,
+                        'type' => 'like'
+                    ]);
+                }
             }
             
             $post = Post::find(request()->id);

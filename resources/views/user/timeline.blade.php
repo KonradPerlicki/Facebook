@@ -39,8 +39,8 @@
                                 </svg>
                                 <span> Add Your Story </span>
                             </a>
-                            @else {{-- TODO:adding users and change dropdown --}}
-                                @if($user->friendWith(auth()->user()))
+                            @else
+                                @if($user->friendWith(auth()->user())){{-- if both users are friends --}}
                                 <div class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
                                     <span>Friends &check; </span>
                                 </div>
@@ -68,19 +68,19 @@
                                         </li>
                                     </ul>
                                 </div>
-                                @else
+                                @else {{-- if invite was sent --}}
                                     @foreach (auth()->user()->invites as $invite)
                                         @if ($sent = $invite->invitedBy(auth()->user()) && $invite->receiver_id==$user->id)
-                                        <button id="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }}, true)"
-                                            class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                        <button onclick="remove_friend({{ $user->id }}, true)"
+                                            class="add_friend{{ $user->id }} flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
                                                 <span> Sent &check; </span>
                                             </button>
                                             @break
                                         @endif
                                     @endforeach
-                                    @if(!$sent)
-                                    <button id="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }}, true)"
-                                        class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                    @if(!isset($sent)) {{-- if invite was not sent and are not friends --}}
+                                    <button  onclick="add_friend({{ $user->id }}, true)"
+                                        class="add_friend{{ $user->id }} flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
                                             </svg>
@@ -103,11 +103,13 @@
                            @endif
                             {{-- Posts TODO PAGINATION --}}
                             @foreach ($posts as $post)
-                                <x-index.post-card :post="$post"/>
+                                {{-- TODO check this if it displays correctly --}}
+                                <x-index.post-card :post="$post" :invites="auth()->user()->invites"/>
                             @endforeach
                             @if(!$posts->count())
                                 <div class="text-center italic text-gray-400 p-5">This user doesn't have any posts</div>
                             @endif
+                            {{ $posts->links() }}
                         </div>
                         <!-- Sidebar -->
                         <div class="w-full space-y-6">

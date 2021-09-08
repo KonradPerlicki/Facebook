@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -72,5 +73,30 @@ class User extends Authenticatable implements MustVerifyEmail
     public function friendWith(User $user)
     {
         return $this->friends->contains('friend_id', $user->id);
+    }
+    //returns number of mutual
+    public function mutual_friends(User $user)
+    { 
+        $user_id = $user->id; //id checked currently user
+
+        if(Cache::has('myfriends')){
+            $friends = Cache::get('myfriends');
+        }else{
+            $myfriends = Friend::with('user')->where('user_id', auth()->id())->get(); //friends user's currented logged in
+            $friends=[];
+            foreach($myfriends as $friendId){
+                $friends[] .= $friendId->user->id;
+            }
+            Cache::add('myfriends', $friends, now()->addMinutes(10));
+        }
+        //TODO OPTIMIZE THIS TOO MANY COUNTS
+        $mutual_friends = Friend::without('user')->whereIn('friend_id',$friends)->where('user_id',$user_id)->count();
+        
+        return $mutual_friends;
+    }
+
+    public function hasBirthday($id)
+    {
+        return User::where('id',$id)->whereDay('birth_date',date('d'))->whereMonth('birth_date', date('m'))->first();
     }
 }

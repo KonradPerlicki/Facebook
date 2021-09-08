@@ -2,12 +2,12 @@
     <!-- post header-->
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
-            <a href="#">
+            <a href="{{ route('profile', $post->author->username) }}">
                 <img src="{{ Storage::url($post->author->profile_image) }}"
                     class="bg-gray-200 border border-white rounded-full w-10 h-10">
             </a>
             <div class="flex-1 capitalize">
-                <a href="#" class="text-black dark:text-gray-100 font-semibold">
+                <a href="{{ route('profile', $post->author->username) }}" class="text-black dark:text-gray-100 font-semibold">
                     {{ $post->author->first_name . ' ' . $post->author->last_name}}</a>
                 <div class="text-gray-700 flex items-center space-x-2 font-medium">
                     {{$post->created_at->diffForHumans()}} <span> </span>
@@ -169,7 +169,8 @@
         </div>
         @endif
         @if($post->image && $post->video)
-        <hr class="my-2 dark:border-gray-800 mb-3"> @endif
+            <hr class="my-2 dark:border-gray-800 mb-3"> 
+        @endif
         @if($post->video)
         <video controls width="400" class="mx-auto">
             <source src="{{ Storage::url($post->video) }}">
@@ -264,20 +265,17 @@
                 </h2>
                 <div class="px-2 uk-switcher" id="likers{{ $post->id }}">
                     <div>
+                        {{-- TODO add mutual friends with that user and update right widget also --}}
                         @foreach($post->likes as $liker)
-                        {{-- TODO: ajax load users/BUG when current user dislike hes not removed from list  --}}
-                            @if(isset($invites[$loop->index])) {{-- check if index in invites exists  --}}
-                                {{-- Check if current user in loop is invited by logged in user--}}
-                                @if($invites[$loop->index]->invitedBy(auth()->user()) && $invites[$loop->index]->receiver_id == $liker->user->id)
-                                    <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
-                                @elseif($liker->user->friendWith(auth()->user())) {{-- not invited --}}
-                                    <x-index.friend :user="$liker->user" :preview="false" :friends="true"/>
-                                @else
-                                    <x-index.friend :user="$liker->user" :preview="false" />
-                                @endif
+                            @if(in_array($liker->user->id, Cache::get('invited_users'))){{-- true or false if is invited --}} 
+                                <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
+                            @elseif($liker->user->friendWith(auth()->user())) {{-- are friends --}}
+                                <x-index.friend :user="$liker->user" :preview="false" :friends="true"/>
+                            @else  {{-- not invited and not friend --}}
+                                <x-index.friend :user="$liker->user" :preview="false" />
                             @endif
                         @endforeach
-                        @if(!$post->likes->count()){{-- THIS SHOULD BE DONE IN OTHER WAY - loading all likers for every post is bad --}}
+                        @if(!$post->likes->count()){{-- THIS SHOULD BE DONE IN OTHER WAY - loading all likers for every post is unnecessary --}}
                             <div class="text-lg text-center pt-3 text-gray-400">
                                 No one liked this post yet.
                             </div>

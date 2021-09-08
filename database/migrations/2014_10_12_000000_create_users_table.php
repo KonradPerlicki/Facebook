@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('gender',10);
+            $table->date('birth_date');
             $table->string('about_me')->nullable();
             $table->string('location')->nullable();
             $table->string('working_at')->nullable();
