@@ -5,7 +5,7 @@ function mark_as_read(id) {
         },
     });
     $.ajax({
-        url: "mark-as-read",
+        url: "/mark-as-read",
         type: "POST",
         data: { id: id },
         success: function () {
@@ -21,7 +21,7 @@ function friend_accept(user_id, div_id) {
         },
     });
     $.ajax({
-        url: "friend-accept",
+        url: "/friend-accept",
         type: "POST",
         data: { user_id: user_id },
         success: function () {
@@ -40,8 +40,8 @@ function friend_decline(user_id, div_id) {
         },
     });
     $.ajax({
-        url: "friend-decline",
-        type: "POST",
+        url: "/friend-decline",
+        type: "DELETE",
         data: { user_id: user_id },
         success: function () {
             $("#form" + div_id).html(

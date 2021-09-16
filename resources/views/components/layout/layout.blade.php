@@ -1,7 +1,7 @@
 @props(['styles' =>'' ,
 'index' => '' , 'scripts' => '' ,'title' => 'Facebook' , 
 'showSideBar' => true, 'user' => auth()->user(), 
-'notifications' => \App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('updated_at')->take(8)->get(),
+'notifications' => App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('updated_at')->take(8)->get(),
 ])
 {{-- START: OPENING PAGE 
 ================================================================
@@ -15,7 +15,7 @@
     <!-- Favicon -->
     <link href="{{ asset('assets/images/favicon.png') }}" rel="icon" type="image/png">
     <!-- Basic Page Needs
-        ================================================== -->
+    ================================================== -->
     <title>{{ $title }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

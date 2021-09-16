@@ -1,9 +1,7 @@
 <li class="relative">
-    <span uk-switcher-item="previous" class="slider-icon is-left"> </span>
-    <span uk-switcher-item="next" class="slider-icon is-right"> </span>
     <div uk-lightbox>
-        <a href="assets/images/avatars/avatar-lg-2.jpg" data-alt="Image">
-            <img src="assets/images/avatars/avatar-lg-2.jpg" class="story-slider-image"  data-alt="Image">
+        <a href="{{ Storage::url($user->available_story->image) }}" data-caption="Added {{ $user->available_story->expires_at->addHours(-24)->diffForHumans() }}">
+            <img src="{{ Storage::url($user->available_story->image) }}" class="story-slider-image" alt="{{ $user->username }}">
         </a>
     </div>
 </li>

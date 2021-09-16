@@ -32,6 +32,8 @@ class InviteController extends Controller
         //refresh list of invited users
         $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
         Cache::forever('invited_users', $invited_users);
+
+        return response('Success',200);
     }
 
     public function destroy()

@@ -74,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->friends->contains('friend_id', $user->id);
     }
-    //returns number of mutual
+    //returns number of mutual friends
     public function mutual_friends(User $user)
     { 
         $user_id = $user->id; //id checked currently user
@@ -94,9 +94,23 @@ class User extends Authenticatable implements MustVerifyEmail
         
         return $mutual_friends;
     }
-
+    //TODO add if two users have birthday display all of them
     public function hasBirthday($id)
     {
         return User::where('id',$id)->whereDay('birth_date',date('d'))->whereMonth('birth_date', date('m'))->first();
+    }
+
+    public function story()
+    {
+        return $this->hasOne(Story::class);
+    }
+    public function available_story()
+    {
+        return $this->story()->where('expires_at', '>=', now());
+    }
+    public function viewed_story($id)
+    {
+        $viewed_stories = ViewedStories::where('user_id',auth()->id())->latest()->pluck('story_id');
+        return $viewed_stories->contains($id);
     }
 }

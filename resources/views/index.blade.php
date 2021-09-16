@@ -11,13 +11,52 @@
                         <!-- Validation Errors -->
                         <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors" />
                       
-                        {{-- START: Stories top TODO: MAX 5 DISPLAY --}}
+                        {{-- START: Stories TOP --}}
                       <div class="user_story grid md:grid-cols-5 grid-cols-3 gap-2 lg:-mx-20 relative">
-                          <x-index.story-preview name="Johnathan" />
-                          <x-index.story-preview name="Johnathan" />
-                          <x-index.story-preview name="Johnathan" />
-                          <x-index.story-preview name="Johnathan" />
-                          <x-index.story-preview name="Johnathan" />
+                        @php $stories=1; @endphp
+                        @foreach ($user->friends as $friend)
+                            @if ($friend->user->available_story)
+                                <x-index.story-preview :user="$friend->user" />
+                                    @php $stories++; @endphp
+                            @endif
+                            @if($stories > 4)
+                                <a href="#" uk-toggle="target: body ; cls: story-active">
+                                    <div class="bg-blue-100 single_story">
+                                        <img src="{{ Storage::url('public/stories/3dots.jpg') }}" >
+                                        <div class="story-content text-center text-xl"> <h4> And more </h4> </div>
+                                    </div>
+                                </a>
+                                @break
+                            @endif
+                        @endforeach
+                        {{-- Script for marking story as read --}}
+                        <x-slot name="scripts">
+                            <script>
+                                $('.story-list').click(function(){
+                                    username = this.id
+                                    clicked_story = this
+                                    $.ajaxSetup({
+                                        headers: {
+                                            "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content"),
+                                        },
+                                    });
+                                    $.ajax({
+                                        url: "show-story",
+                                        type: "POST",
+                                        data: { username: username },
+                                        success: function () {
+                                            $(clicked_story).children('div:first').removeClass('border-blue-600')
+                                            $(clicked_story).children('div:first').addClass('border-gray-500')
+                                            $(clicked_story).find("span[class='text-blue-600']").remove() 
+
+                                            $('.preview_open_story[id="'+username+'"]').children().children('img:first').removeClass('filter blur-2xl')
+                                            $('.preview_open_story[id="'+username+'"]').children().children('div:first').removeClass('border-blue-600')
+                                            $('.preview_open_story[id="'+username+'"]').children().children('div:first').addClass('border-gray-500')
+                                        },
+                                    });
+                                })
+                            </script>
+                        </x-slot>
                       </div>
                       {{-- END: Stories top --}}
                       {{-- START: Create Post Section --}}
@@ -38,34 +77,31 @@
     <div class="story-prev">
         <div class="story-sidebar uk-animation-slide-left-medium">
             <div class="md:flex justify-between items-center py-2 hidden">
-                <h3 class="text-2xl font-semibold"> All Story </h3>
+                <h3 class="text-2xl font-semibold"> All Stories </h3>
             </div>
             <div class="story-sidebar-scrollbar" data-simplebar>
-                <h3 class="text-lg font-medium"> Your Story </h3>
-                <a class="flex space-x-4 items-center hover:bg-gray-100 md:my-2 py-2 rounded-lg hover:text-gray-700" href="#">
-                    <svg class="w-12 h-12 p-3 bg-gray-200 rounded-full text-blue-500 ml-1" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    <div class="flex-1">
-                        <div class="text-lg font-semibold"> Create a story </div>
-                        <div class="text-sm -mt-0.5"> Share a photo or write something. </div>
-                    </div>
-                </a>
-                <h3 class="text-lg font-medium lg:mt-3 mt-1"> Friends Story </h3>
                 <div class="story-users-list"  uk-switcher="connect: #story_slider ; toggle: > * ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium ">
-                    <x-index.story-list user="Andrzej Białek" />
-                    <x-index.story-list user="Andrzej Białek" />
-                    <x-index.story-list user="Andrzej Białek" />
+                    <a href="#" style="display:none">
+                        Select story to display
+                    </a>
+                    @foreach ($user->friends as $friend)
+                        @if ($friend->user->available_story)
+                            <x-index.story-list :user="$friend->user" />
+                        @endif
+                    @endforeach
                 </div>
             </div>
         </div>
         <div class="story-content">
             <ul class="uk-switcher uk-animation-scale-up" id="story_slider" >
-                <x-index.story-display />{{-- TODO: pass $user->image --}}
-                <x-index.story-display />
-                <x-index.story-display />
+                <li class="relative text-2xl">
+                    <ion-icon name="arrow-back-outline" class="w-7 h-7"></ion-icon><span> Select story to display</span>
+                </li>
+                @foreach ($user->friends as $friend)
+                    @if ($friend->user->available_story)
+                        <x-index.story-display :user="$friend->user"/>
+                    @endif
+                @endforeach
             </ul>
         </div>
         <!-- story close button-->

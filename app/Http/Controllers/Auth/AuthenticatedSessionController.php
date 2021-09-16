@@ -35,8 +35,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-        Cache::forever('invited_users', $invited_users);
-
+        if(empty($invited_users)){
+            Cache::forever('invited_users', []);
+        }else{
+            Cache::forever('invited_users', $invited_users);
+        }
+        
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

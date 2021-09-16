@@ -6,7 +6,7 @@ function remove_friend(id, on_timeline = false)
         }
     });
     $.ajax({
-        'type' : 'POST',
+        'type' : 'DELETE',
         'url':'/remove-friend-invite',
         'data' :{id:id},
         success:function(data){

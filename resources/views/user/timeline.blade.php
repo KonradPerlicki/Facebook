@@ -5,6 +5,8 @@
                 <!-- Session Status -->
                 <x-flash-messages.auth-session-status class="mb-8 p-4 bg-green-100 rounded-xl" :status="session('status')" />
                 
+                <x-flash-messages.auth-validation-errors class="mb-8 p-4 bg-red-100 rounded-xl" :errors="$errors" />
+
                 {{-- Top section --}}
                 <div class="profile user-profile">
                     <div class="profiles_banner">
@@ -12,9 +14,46 @@
                     </div>
                     <div class="profiles_content">
                         <div class="profile_avatar">
-                            <div class="profile_avatar_holder"> 
-                                <img src="{{ Storage::url($user->profile_image) }}" alt="">
-                            </div>
+                            @if((auth()->user()->friendWith($user) && $user->available_story) || auth()->user()->available_story)
+                                <div id="{{ $user->username }}" onclick="show_story('{{ $story->user->username }}')" uk-lightbox 
+                                    class="profile_avatar_holder border-4 
+                                    @if($user->viewed_story($user->available_story->id))
+                                    border-gray-500
+                                    @else
+                                    border-blue-600
+                                    @endif rounded-full cursor-pointer"> 
+                                    <a class="uk-button" href="{{ Storage::url($story->image)}}"  data-caption="Added {{ $story->expires_at->addHours(-24)->diffForHumans() }} @if($story->user_id == auth()->id()) | Views: {{ $story->views }} @endif">
+                                        <img src="{{ Storage::url($user->profile_image) }}" alt="">
+                                    </a>
+                                </div>
+                                {{-- Script for marking story as read --}}
+                                @if($story->user_id != auth()->id())
+                                    <x-slot name="scripts">
+                                        <script>
+                                            function show_story(username){
+                                                $.ajaxSetup({
+                                                    headers: {
+                                                        "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content"),
+                                                    },
+                                                });
+                                                $.ajax({
+                                                    url: "/show-story",
+                                                    type: "POST",
+                                                    data: { username: username },
+                                                    success: function () {
+                                                        $("div[id='"+username+"']").removeClass('border-blue-600')
+                                                        $("div[id='"+username+"']").addClass('border-gray-500')
+                                                    },
+                                                });
+                                            }
+                                        </script>
+                                    </x-slot>
+                                @endif
+                            @elseif(!$user->available_story || $story->user_id != auth()->id())
+                                <div class="profile_avatar_holder border-4 border-white"> 
+                                    <img src="{{ Storage::url($user->profile_image) }}" alt="">
+                                </div>    
+                            @endif
                         </div>
                         <div class="profile_info">
                             <h1> {{ $user->first_name .' ' . $user->last_name}} </h1>
@@ -25,20 +64,104 @@
                         <nav class="responsive-nav pl-2 is_ligh -mb-0.5 border-transparent">
                             <ul  uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                 <li><a href="#">Timeline</a></li>
-                                <li><a href="#">Friends <span>3,243</span> </a></li>
+                                <li><a href="#">Friends <span>{{ $friends->count() }}</span> </a></li>
                                 <li><a href="#">Pages</a></li> 
                                 <li><a href="#">Groups</a></li> 
                             </ul>
                         </nav>
- 
                         <div class="flex items-center space-x-1.5 flex-shrink-0 pr-3  justify-center order-1">
                             @if($user->id == auth()->id())
-                            <a href="#" class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span> Add Your Story </span>
-                            </a>
+                                @if(!$story){{-- If user doesn't have story --}}
+                                    <a href="#add-story" uk-toggle class="uk-button uk-button-default flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span> Add Your Story </span>
+                                    </a>
+                                    {{-- Story Modal --}}
+                                    <div id="add-story" uk-modal>
+                                        <div class="uk-modal-dialog ">
+                                            <form id="create-story" method="POST" action="{{ route('story.add', $user->id) }}" enctype="multipart/form-data">
+                                            @csrf
+                                                <button class="uk-modal-close-default" type="button" uk-close></button>
+                                                <div class="uk-modal-header">
+                                                    <h2 class="uk-modal-title">Add your story</h2>
+                                                    <span class="text-gray-400">Story will be visible only for 24 hours</span>
+                                                </div>
+                                                <div class="uk-modal-body">
+                                                    <div id="preview-story" class="border shadow-sm bg-gray-300 h-96 relative flex flex-col items-center justify-center rounded-md py-8 mt-2 z-10">
+                                                        <label for="story-image" class="cursor-pointer py-36 px-48">
+                                                                <div class="w-12 h-12 items-center mx-auto justify-center">
+                                                                    <ion-icon name="image-outline" class="w-10 h-10"></ion-icon>
+                                                                </div>
+                                                                <div class="mt-2">Choose your photo</div>
+                                                        </label>
+                                                        <input onchange="readURL(this)" type="file" class="w-full hidden  h-full top-0 left-0 absolute opacity-0" id="story-image" name="image"  accept="image/*">
+                                                        <p class="absolute bottom-0 font-medium" style="color:#EF4444;" id="imageReq"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-modal-footer flex items-center w-full  p-3">
+                                                    <ion-icon name="eye" class="w-8 h-8 mr-2"></ion-icon>
+                                                    <select name="who_can_see" class="selectpicker mt-2 pr-64">
+                                                        <option value="2">My friends</option>
+                                                        <option value="1">My friends and their friends</option>
+                                                        <option value="0">Only me</option>
+                                                    </select>
+                                                    <div class="flex space-x-2">
+                                                        <button type="submit" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                                                            Share </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {{-- javascript for adding new story --}}
+                                    <x-slot name="scripts">
+                                        <script>
+                                        function readURL(input) {
+                                            if(input.files && input.files[0]) {
+                                                var reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    $('#preview-story').css('background', 'transparent url('+e.target.result +') ');
+                                                    $('#preview-story').css('background-size', 'cover');
+                                                    $('#preview-story').css('background-position', 'center center');
+                                                }
+                                                reader.readAsDataURL(input.files[0]);
+                                            }
+
+                                            if(!$('#clear-preview').length){ //if exist it doesn't append delete button
+                                                $('#preview-story').append('<div id="clear-preview" onclick="delete_preview()" class="bg-red-500 border-white w-6 h-6 absolute -right-2 -top-2 rounded-full border-2 text-white text-center cursor-pointer z-50">&#x2716;</div>')
+                                            }
+                                            if($('#imageReq').length){ //clear message
+                                                $('#imageReq').html('')        
+                                            }
+                                            //delete label with text and icon
+                                            $('#preview-story label').remove()
+                                        }
+                                        function delete_preview(){
+                                            $('#story-image').val('')
+                                            $('#preview-story').css('background', '')
+                                            $('#clear-preview').remove()
+                                            $('#preview-story').prepend('<label for="story-image" class="cursor-pointer py-36 px-48"><div class="w-12 h-12 items-center mx-auto justify-center"><ion-icon name="image-outline" class="w-10 h-10"></ion-icon></div><div class="mt-2">Choose your photo</div></label>')
+                                        }
+
+                                        $('#create-story').submit(function(e){
+                                            if($('#story-image').val() == ''){
+                                                $('#imageReq').html('You have to add your photo')        
+                                                e.preventDefault()
+                                            }
+                                        });
+                                        </script>
+                                    </x-slot>
+                                @else
+                                <form method="POST" action="{{ route('story.destroy') }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button uk-tooltip="This action is irreversible" type="submit" class="w-full px-3 py-2 text-left text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                        <ion-icon name="trash-outline" class="pr-2 text-xl align-middle"></ion-icon>  Delete my story
+                                    </button>
+                                </form>
+                                @endif
                             @else
                                 @if($user->friendWith(auth()->user())){{-- if both users are friends --}}
                                 <div class="flex items-center justify-center hover:text-gray-300 h-10 px-5 rounded-md bg-blue-600 text-white  space-x-1.5"> 
@@ -98,8 +221,8 @@
                     <div class="md:flex md:space-x-6 lg:mx-16">
                         <div class="space-y-5 flex-shrink-0 md:w-7/12">
                            {{-- Create post form --}}
-                           @if($user == auth()->user())
-                           <x-forms.create-post :user="$user"/>
+                           @if($user->id == auth()->id())
+                            <x-forms.create-post :user="$user"/>
                            @endif
                             {{-- Posts TODO PAGINATION --}}
                             @foreach ($posts as $post)
@@ -137,15 +260,13 @@
                                 <div class="flex items-center justify-between mb-4">
                                     <div>
                                         <h4 class="text-lg font-semibold"> Friends </h4>
-                                        <p class="text-sm"> 3,451 Friends</p>
+                                        <p class="text-sm"> {{ $friends->count() }} {{ Str::plural('friend', $friends->count()) }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold">
-                                    <x-user.friend />
-                                    <x-user.friend />
-                                    <x-user.friend />
-                                    <x-user.friend />
-                                    <x-user.friend />
+                                    @foreach ($friends as $friend)
+                                        <x-user.friend :user="$friend->user"/>
+                                    @endforeach
                                 </div>
                             </div>
                             {{-- Groups SIDE --}}
@@ -168,19 +289,14 @@
                     <div class="card md:p-6 p-2 max-w-3xl mx-auto">
                         <h2 class="text-xl font-semibold"> Friends</h2>
                         <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
-                            <x-user.friend card='card'/>
+                            @foreach ($friends as $friend)
+                                <x-user.friend :user="$friend->user" :card="true"/>
+                            @endforeach
                         </div>
                         {{-- TODO AJAX --}}
                         <div class="flex justify-center mt-6">
                             <a href="#" class="bg-white font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
-                                Load more ...</a>
+                                Load all ...</a>
                         </div>
                     </div>
                     {{-- GROUPS SECTION --}}

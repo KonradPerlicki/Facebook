@@ -30,13 +30,13 @@
             <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2" type="button" uk-close
                 uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
         </div>
-        <form method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+        <form id="create-post" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
             @csrf
             <div class="flex flex-1 items-start space-x-4 p-5">
                 <img src="{{ Storage::url($user->profile_image) }}"
                     class="bg-gray-200 border border-white rounded-full w-11 h-11">
                 <div class="flex-1 pt-2">
-                    <textarea name="content" class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
+                    <textarea id="content" name="content" class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                         rows="5" placeholder="What's Your Mind ?">{{ old('content') }}</textarea>
                 </div>
             </div>
@@ -64,6 +64,7 @@
                 </div>
             </div>
             <div class="flex items-center w-full justify-between border-t p-3">
+                <ion-icon name="eye" class="w-8 h-8 mr-2"></ion-icon>
                 <select name="who_can_see" class="selectpicker mt-2 story">
                     <option value="2">Every one</option>
                     <option value="1">Only my friends and their friends</option>
@@ -96,4 +97,12 @@
             </div>
     </div>--}}
 </div>
+<script>
+    $('#create-post').submit(function(e){
+        if($('#content').val()=='' && $('#image').val()=='' && $('#video').val()==''){
+            alert('You can\'t create a post without any content')
+            e.preventDefault()
+        }
+    });
+</script>
 {{-- END: Create Post --}}

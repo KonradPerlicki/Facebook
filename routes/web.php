@@ -9,6 +9,8 @@ use App\Http\Controllers\Ajax\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StoryController;
+use App\Http\Controllers\ViewedStoriesController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -39,16 +41,20 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     //ajax - sending invites
     Route::post('/add-friend-invite', [InviteController::class, 'store']);
-    Route::post('/remove-friend-invite', [InviteController::class, 'destroy']);
+    Route::delete('/remove-friend-invite', [InviteController::class, 'destroy']);
     //ajax - accepting/rejecting friend requests
     Route::post('/friend-accept',[FriendController::class, 'store']);
-    Route::post('/friend-decline',[FriendController::class, 'destroy']);
+    Route::delete('/friend-decline',[FriendController::class, 'destroy']);
     //unfriend
     Route::post('/friend-remove/{id}',[FriendController::class, 'unfriend'])->name('unfriend');
 
 
     //profile
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
+    //stories
+    Route::post('/create-story/{id}', [StoryController::class, 'store'])->name('story.add');
+    Route::delete('/delete-story', [StoryController::class, 'destroy'])->name('story.destroy');
+    Route::post('/show-story', [StoryController::class, 'count']);
     
     //post
     Route::get('/post/{id}',[PostController::class, 'show'])->name('post.show');

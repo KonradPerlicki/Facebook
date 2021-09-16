@@ -12,8 +12,12 @@ class NotificationController extends Controller
     //its not seen and update this rows to seen
     public function mark_as_read()
     {
-        Notification::withoutTrashed()->where('to_user_id', request()->id)
-        ->where('seen',false)->update(['seen' => true]);
+        if(Notification::withoutTrashed()->where('to_user_id', request()->id)
+        ->where('seen',false)->update(['seen' => true])){
+            return response('Success',200);
+        }else{
+            return response('Error',500);
+        }
     }
 
     public function index()

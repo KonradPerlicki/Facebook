@@ -1,10 +1,17 @@
-@props(['user'])
-<a href="#">
-    <div class="story-media">
-        <img src="assets/images/avatars/avatar-1.jpg" alt="">
+<a id="{{ $user->username }}" href="#" class="story-list">
+    <div class="story-media border-4 @if($user->viewed_story($user->available_story->id))
+        border-gray-500
+        @else
+        border-blue-600
+        @endif">
+        <img src="{{ Storage::url($user->profile_image) }}" alt="">
     </div>
     <div class="story-text">
-        <div class="story-username"> {{ $user }}</div>
-        <p> <span class="story-count"> New </span> <span class="story-time"> 4Mn ago</span> </p>
+        <div class="story-username"> {{ $user->first_name. ' ' .$user->last_name}}</div>
+        <p>
+            @if(!$user->viewed_story($user->available_story->id))
+                <span class="text-blue-600"> New </span>
+            @endif 
+            <span class="story-time"> {{ $user->available_story->expires_at->addHours(-24)->diffForHumans() }}</span> </p>
     </div>
 </a>

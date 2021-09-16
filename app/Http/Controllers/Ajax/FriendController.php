@@ -13,10 +13,6 @@ class FriendController extends Controller
     public function store()
     {
         $user_id = request()->user_id;
-        #User::with('friends')->where('id',$id)->get()
-        #mutual    dd(Friend::where('user_id',$id)->whereIn('friend_id',[10])->get());
-        #dd(Friend::where('user_id', $id)->orWhere('user_id2', $id)->get());
-        #dd(Friend::with('user')->where('user_id', auth()->id())->get()); //show MY friends
         $invite = Invite::where('sender_id', $user_id)->where('receiver_id', auth()->id())->first();
         $invite->forceDelete();
         
@@ -33,11 +29,15 @@ class FriendController extends Controller
             'additional_id' => 2
         ]);
 
-        request()->user()->notifications()->create([
+        if(request()->user()->notifications()->create([
             'to_user_id' => $user_id,
             'content' => ' has accepted your friend request.',
             'type' => 'accepted'
-        ]);
+        ])){
+            return response('Success',200);
+        }else{
+            return response('Error',500);
+        }
     }
 
     public function destroy()
@@ -50,11 +50,15 @@ class FriendController extends Controller
             'additional_id' => 1
         ]);
 
-        request()->user()->notifications()->create([
+        if(request()->user()->notifications()->create([
             'to_user_id' => $user_id,
             'content' => ' has rejected your friend request.',
             'type' => 'rejected'
-        ]);
+        ])){
+            return response('Success',200);
+        }else{
+            return response('Error',500);
+        }
     }
 
     public function unfriend($id)
