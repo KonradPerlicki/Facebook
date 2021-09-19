@@ -1,23 +1,26 @@
-@props(['user','preview'=>true,'invited'=>false, 'friends'=>false])
+@props(['user','preview'=>true,'invited'=>false, 'friends'=>false ])
 <div class="flex items-center space-x-4 rounded-md p-2 hover:bg-gray-50">
     <a href="{{ route('profile', $user->username) }}" class="w-12 h-12 flex-shrink-0 overflow-hidden rounded-full relative">
         <img src="{{ Storage::url($user->profile_image) }}" class="absolute w-full h-full inset-0 " alt="">
     </a>
     <div class="flex-1">
         <a href="{{ route('profile', $user->username) }}" class="text-sm font-semibold capitalize">{{ $user->first_name . ' ' . $user->last_name}}</a>
-        @if($user->id != auth()->id())
-        {{-- TODO mutual friends --}}
-        <div class="text-xs text-gray-500 mt-0.5"> <b>12 mutual</b> friends</div>
+        {{--  @if($user->id != auth()->id())
+        TODO mutual friends too many queries
+            @if (auth()->user()->mutual_friends($user))
+                <div class="text-xs text-gray-500 mt-0.5"> <b>{{ auth()->user()->mutual_friends($user) }} mutual</b> friends</div>
+            @endif
         @endif
+        --}}
     </div>
     @if($user->id != auth()->id())
     <div class="flex items-center justify-center h-8 px-3 rounded-md text-sm border font-semibold bg-blue-500 text-white" >
         @if($friends)
             <div>Friends &check;</div>
         @elseif($invited)             
-            <button id="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }})" >Sent &check;</button>
+            <button class="add_friend{{ $user->id }}" onclick="remove_friend({{ $user->id }})" >Invite was sent &check;</button>
         @else{{-- not invited and not friends --}}
-            <button id="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }})" ><ion-icon name="person-add-outline" class="w-5 h-5 pt-1"></ion-icon></button>
+            <button class="add_friend{{ $user->id }}" onclick="add_friend({{ $user->id }})" ><ion-icon name="person-add-outline" class="w-5 h-5 pt-1"></ion-icon></button>
         @endif
     </div>
     @endif

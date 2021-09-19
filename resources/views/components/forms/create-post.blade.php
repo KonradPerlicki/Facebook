@@ -63,15 +63,9 @@
                     </div>
                 </div>
             </div>
-            <div class="flex items-center w-full justify-between border-t p-3">
-                <ion-icon name="eye" class="w-8 h-8 mr-2"></ion-icon>
-                <select name="who_can_see" class="selectpicker mt-2 story">
-                    <option value="2">Every one</option>
-                    <option value="1">Only my friends and their friends</option>
-                    <option value="0">Only me</option>
-                </select>
-                <div class="flex space-x-2">
-                    <button type="submit" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+            <div class="text-right w-full border-t p-3">
+                <div>
+                    <button type="submit" class="bg-blue-600 h-9 rounded-md text-white px-5 font-medium">
                         Share </button>
                 </div>
             </div>

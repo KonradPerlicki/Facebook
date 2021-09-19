@@ -14,21 +14,19 @@
     @endforeach
     
 
-    <h3 class="text-xl font-semibold"> Other Users </h3>
     <div class="" uk-sticky="offset:80">
       <div class="widget card p-5 border-t">
           <div class="flex items-center justify-between mb-2">
               <div>
-                  <h4 class="text-lg font-semibold"> all users TODO Related friends</h4>
+                  <h4 class="text-lg font-semibold">Other users</h4>
               </div>
-              <a href="#" class="text-blue-600 hover:underline"> See all</a>
         </div>
             <div>
                 @foreach(App\Models\User::where('id','!=', auth()->id())->inRandomOrder()->take(8)->get() as $user)
                     @if(in_array($user->id, Cache::get('invited_users'))){{-- true or false if is invited --}} 
                         <x-index.friend :user="$user" :invited="true"/>
                     @elseif($user->friendWith(auth()->user())) {{-- are friends --}}
-                        <x-index.friend :user="$user" :friends="true"/>
+                        @continue
                     @else  {{-- not invited and not friend --}}
                         <x-index.friend :user="$user" />
                     @endif

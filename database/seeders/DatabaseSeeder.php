@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         User::factory(15)->create();
         Post::factory(20)->create();
         Settings::factory(15)->create();
-        Like::factory(60)->create();
+        Like::factory(100)->create();
         #Invite::factory(50)->create(); invite is related with notifications
 
     }

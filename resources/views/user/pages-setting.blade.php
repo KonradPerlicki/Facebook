@@ -102,7 +102,7 @@
                                 <select name="who_can_follow"
                                         class="shadow-none selectpicker with-border ">
                                     <option value="2" {{ $user->settings->who_can_follow==2 ? 'selected' : '' }}>Everyone</option>
-                                    <option value="1" {{ $user->settings->who_can_follow==1 ? 'selected' : '' }}>Only friends my friends</option>
+                                    <option value="1" {{ $user->settings->who_can_follow==1 ? 'selected' : '' }}>Only my friends</option>
                                     <option value="0" {{ $user->settings->who_can_follow==0 ? 'selected' : '' }}>Anyone</option>
                                 </select>
                             </div>
@@ -115,7 +115,7 @@
                                 <select name="show_my_activities"
                                         class="shadow-none selectpicker story with-border ">
                                     <option value="2" {{ $user->settings->show_my_activities==2 ? 'selected' : '' }}>Every one</option>
-                                    <option value="1" {{ $user->settings->show_my_activities==1 ? 'selected' : '' }}>Only my friends and their friends</option>
+                                    <option value="1" {{ $user->settings->show_my_activities==1 ? 'selected' : '' }}>Only my friends</option>
                                     <option value="0" {{ $user->settings->show_my_activities==0 ? 'selected' : '' }}>Any one</option>
                                 </select>
                             </div>

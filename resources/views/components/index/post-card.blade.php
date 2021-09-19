@@ -164,7 +164,7 @@
         <div uk-lightbox>
             <a href="{{ Storage::url($post->image) }}">
                 {{-- TODO Change this and PostFactory --}}
-                <img src="{{ $post->image }}" alt="" class="w-full object-cover">
+                <img src="{{ Storage::url($post->image) }}" alt="" class="w-full object-cover">
             </a>
         </div>
         @endif

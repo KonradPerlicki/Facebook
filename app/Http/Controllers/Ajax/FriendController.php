@@ -7,6 +7,7 @@ use App\Models\Friend;
 use App\Models\Invite;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class FriendController extends Controller
 {
@@ -16,11 +17,11 @@ class FriendController extends Controller
         $invite = Invite::where('sender_id', $user_id)->where('receiver_id', auth()->id())->first();
         $invite->forceDelete();
         
-        request()->user()->friends()->create([
+        request()->user()->friends()->firstOrCreate([
             'friend_id' => $user_id,
         ]);
         //create reversed relation
-        Friend::create([
+        Friend::firstOrCreate([
             'user_id' => $user_id,
             'friend_id' => auth()->id(),
         ]);
@@ -34,6 +35,8 @@ class FriendController extends Controller
             'content' => ' has accepted your friend request.',
             'type' => 'accepted'
         ])){
+            $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
+            Cache::forever('invited_users', $invited_users);
             return response('Success',200);
         }else{
             return response('Error',500);
@@ -55,6 +58,8 @@ class FriendController extends Controller
             'content' => ' has rejected your friend request.',
             'type' => 'rejected'
         ])){
+            $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
+            Cache::forever('invited_users', $invited_users);
             return response('Success',200);
         }else{
             return response('Error',500);

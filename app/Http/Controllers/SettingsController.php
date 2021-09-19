@@ -89,7 +89,7 @@ class SettingsController extends Controller
         }
         $attributes['content'] = '* '.$user->first_name.' has just updated '.$prefix.$updated.' *';
         $attributes['image'] = $image;
-        $attributes['who_can_see'] = $user->settings->show_my_activities;
+        $attributes['who_can_see'] = 2;
         
         request()->user()->posts()->create($attributes);
     }

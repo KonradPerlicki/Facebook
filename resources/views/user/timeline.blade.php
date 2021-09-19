@@ -100,15 +100,9 @@
                                                         <p class="absolute bottom-0 font-medium" style="color:#EF4444;" id="imageReq"></p>
                                                     </div>
                                                 </div>
-                                                <div class="uk-modal-footer flex items-center w-full  p-3">
-                                                    <ion-icon name="eye" class="w-8 h-8 mr-2"></ion-icon>
-                                                    <select name="who_can_see" class="selectpicker mt-2 pr-64">
-                                                        <option value="2">My friends</option>
-                                                        <option value="1">My friends and their friends</option>
-                                                        <option value="0">Only me</option>
-                                                    </select>
-                                                    <div class="flex space-x-2">
-                                                        <button type="submit" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                                                <div class="uk-modal-footer text-right w-full  p-3">
+                                                    <div>
+                                                        <button type="submit" class="bg-blue-600 h-9 rounded-md text-white px-5 font-medium">
                                                             Share </button>
                                                     </div>
                                                 </div>
