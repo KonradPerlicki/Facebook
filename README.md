@@ -25,3 +25,8 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 - Wyświetlanie powiadomienia jeśli znajomy ma urodziny,
 - Użytkownicy mają możliwość publikowania 'story', które jest aktywne przez 24h od publikacji,
 
+## Dane do logowania
+- Email: konrad.perlicki01@gmail.com  
+Hasło: asdasdasd1
+- Email: tata.wawa@onet.pl  
+Hasło: asdasdasd1
