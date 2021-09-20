@@ -14,7 +14,7 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 
 ## Funkcjonalności
 - Do całego systemu rejestracji/logowania wykorzystałem pakiet Laravel Breeze i przerobiłem na własne potrzeby,
-- Aby wejść na stronę główną, użytkownik musi mieć potwierdzony email,
+- Aby wejść na stronę główną, użytkownik musi mieć potwierdzony email - wykorzystuje Mailtrap,
 - Użytkownicy mają możliwość edycji profilu oraz zmiany ustawień/preferencji,
 - Możliwość zapraszania do znajomych - wykorzystuje AJAX,
 - Panel z notyfikacjami, gdy polubiono nasz post lub zaakceptowano/zaproszono do znajomych - wykorzystuje AJAX,
@@ -25,3 +25,8 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 - Wyświetlanie powiadomienia jeśli znajomy ma urodziny,
 - Użytkownicy mają możliwość publikowania 'story', które jest aktywne przez 24h od publikacji,
 
+## Dane do logowania
+- Email: konrad.perlicki01@gmail.com  
+Hasło: asdasdasd1
+- Email: tata.wawa@onet.pl  
+Hasło: asdasdasd1
