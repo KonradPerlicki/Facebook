@@ -17,24 +17,40 @@
           <!-- search icon for mobile -->
             <div class="header-search-icon" uk-toggle="target: #wrapper ; cls: show-searchbox"> </div>
             <div class="header_search"><i class="uil-search-alt"></i> 
-                <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.." autocomplete="off">
+                <input value="" id="search_input" type="text" class="form-control" placeholder="Search for users..." autocomplete="off">
                 <div uk-drop="mode: click" class="header_search_dropdown">
                     <h4 class="search_title"> Recently </h4>
-                    <ul> {{-- SEARCH ajax display blade template--}}
-                        <li> 
-                            <a href="#">  
-                                <img src="assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
-                                <div class="list-name">  Erica Jones </div>
-                            </a> 
-                        </li> 
-                        <li> 
-                            <a href="#">  
-                                <img src="assets/images/avatars/avatar-2.jpg" alt="" class="list-avatar">
-                                <div class="list-name">  Coffee  Addicts </div>
-                            </a> 
-                        </li>
+                    <ul id="search_hint"> {{-- SEARCH ajax display blade template--}}
+                        <x-layout.top-bar.search-item />
+                        <x-layout.top-bar.search-item />
                     </ul>
                 </div>
+                <script>
+                    $('#search_input').keyup(function(){
+                        search = this.value
+                        $.ajax({
+                            url: "/api/search/"+search,
+                            type: "GET",
+                            data: { search: search },
+                            dataType: "JSON",
+                            success: function (data) {
+                                $('#search_hint').empty()
+                                $('.search_title').html('Results for '+search)
+                                for(let i=0; i<data.length; i++) {
+                                    if(data[i].profile_image.includes('public/')){
+                                        img = data[i].profile_image.replace('public/', 'storage/')
+                                    }else{
+                                        img = data[i].profile_image.replace('profile_image/', 'storage/profile_image/')
+                                    }
+                                    $('#search_hint').append('<li><a href="/profile/'+data[i].username+'"><img class="list-avatar" src="'+img+'"><div class="list-name">'+data[i].first_name+' '+data[i].last_name+'</div></a></li>')
+                                }
+                                if(data.length==0) {
+                                    $('#search_hint').append('<li><a><div class="list-name">No users found</div></a></li>')
+                                }
+                            },
+                        });
+                    })
+                </script>
             </div>
                 <div class="right_side">
                 <div class="header_widgets">

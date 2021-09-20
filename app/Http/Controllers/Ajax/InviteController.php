@@ -31,7 +31,11 @@ class InviteController extends Controller
 
         //refresh list of invited users
         $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-        Cache::forever('invited_users', $invited_users);
+        if(empty($invited_users)){
+            Cache::forever('invited_users', []);
+        }else{
+            Cache::forever('invited_users', $invited_users);
+        }
 
         return response('Success',200);
     }
@@ -45,6 +49,10 @@ class InviteController extends Controller
     
         //refresh list of invited users
         $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-        Cache::forever('invited_users', $invited_users);
+        if(empty($invited_users)){
+            Cache::forever('invited_users', []);
+        }else{
+            Cache::forever('invited_users', $invited_users);
+        }
     }
 }

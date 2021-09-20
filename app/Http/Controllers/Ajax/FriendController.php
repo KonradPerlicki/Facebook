@@ -36,7 +36,11 @@ class FriendController extends Controller
             'type' => 'accepted'
         ])){
             $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-            Cache::forever('invited_users', $invited_users);
+            if(empty($invited_users)){
+                Cache::forever('invited_users', []);
+            }else{
+                Cache::forever('invited_users', $invited_users);
+            }
             return response('Success',200);
         }else{
             return response('Error',500);
@@ -59,7 +63,11 @@ class FriendController extends Controller
             'type' => 'rejected'
         ])){
             $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-            Cache::forever('invited_users', $invited_users);
+            if(empty($invited_users)){
+                Cache::forever('invited_users', []);
+            }else{
+                Cache::forever('invited_users', $invited_users);
+            }
             return response('Success',200);
         }else{
             return response('Error',500);
