@@ -1,5 +1,6 @@
 @props(['styles' =>'' ,
 'index' => '' , 'scripts' => '' ,'title' => 'Facebook' , 
+'searches'=> App\Models\Search::with('user')->where('user_id', auth()->id())->latest()->take(5)->get(),
 'showSideBar' => true, 'user' => auth()->user(), 
 'notifications' => App\Models\Notification::withoutTrashed()->with('from')->where('to_user_id', auth()->id())->orderBy('seen')->orderByDesc('updated_at')->take(8)->get(),
 ])
@@ -34,7 +35,7 @@
 <body>
     <div id="wrapper" {{ $attributes }}>
     @if($showSideBar)
-        <x-layout.top-bar :user="$user" :notifications="$notifications" /> {{-- Top Bar and Sidebar --}}
+        <x-layout.top-bar :user="$user" :notifications="$notifications" :searches="$searches"/> {{-- Top Bar and Sidebar --}}
         {{-- END: OPENING PAGE 
         ================================================================
         --}}

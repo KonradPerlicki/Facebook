@@ -17,12 +17,16 @@
           <!-- search icon for mobile -->
             <div class="header-search-icon" uk-toggle="target: #wrapper ; cls: show-searchbox"> </div>
             <div class="header_search"><i class="uil-search-alt"></i> 
-                <input value="" id="search_input" type="text" class="form-control" placeholder="Search for users..." autocomplete="off">
+                <form method="POST" action="{{ route('search.add' ) }}">
+                    @csrf
+                    <input value="" id="search_input" type="text" name="search" class="form-control" placeholder="Search for users..." autocomplete="off">
+                </form>
                 <div uk-drop="mode: click" class="header_search_dropdown">
                     <h4 class="search_title"> Recently </h4>
                     <ul id="search_hint"> {{-- SEARCH ajax display blade template--}}
-                        <x-layout.top-bar.search-item />
-                        <x-layout.top-bar.search-item />
+                        @foreach ($searches as $search)
+                            <x-layout.top-bar.search-item :search="$search"/>
+                        @endforeach
                     </ul>
                 </div>
                 <script>
@@ -35,8 +39,8 @@
                             dataType: "JSON",
                             success: function (data) {
                                 $('#search_hint').empty()
-                                $('.search_title').html('Results for '+search)
-                                for(let i=0; i<data.length; i++) {
+                                $('.search_title').html(data[0].total+' Results for '+search)
+                                for(let i=1; i<data.length; i++) {
                                     if(data[i].profile_image.includes('public/')){
                                         img = data[i].profile_image.replace('public/', 'storage/')
                                     }else{

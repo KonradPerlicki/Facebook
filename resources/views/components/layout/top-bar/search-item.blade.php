@@ -1,6 +1,5 @@
 <li> 
-    <a href="#">  
-        <img src="assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
-        <div class="list-name">  Erica Jones </div>
+    <a href="/search?search={{ $search->searched_for }}">  
+        <div class="list-name">{{$search->searched_for}}</div>
     </a> 
 </li> 

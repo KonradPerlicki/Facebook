@@ -8,6 +8,7 @@ use App\Http\Controllers\Ajax\NotificationController;
 use App\Http\Controllers\Ajax\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\ViewedStoriesController;
@@ -68,7 +69,9 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingsController::class, 'update']);
 
-
+    //searches
+    Route::get('/search', [SearchController::class, 'index']);
+    Route::post('/search', [SearchController::class, 'store'])->name('search.add');
     
 
 

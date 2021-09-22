@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+
     public function settings()
     {
         return $this->hasOne(Settings::class);
@@ -112,5 +113,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $viewed_stories = ViewedStories::where('user_id',auth()->id())->latest()->pluck('story_id');
         return $viewed_stories->contains($id);
+    }
+
+    public function search()
+    {
+        return $this->hasMany(Search::class);
     }
 }

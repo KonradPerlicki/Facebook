@@ -42,7 +42,7 @@
             <strong> Stella Johnson </strong> and <strong> 14 Others</strong> --}}
         </p>
         <div class="contact-list-box-btns">
-            <a href="{{ route('profile', $user->username) }}" class="flex-1 block">
+            <a href="{{ route('profile', $user->username) }}" class="flex-1 block bg-blue-500">
                 <button type="button" class="button primary w-full">
                     <ion-icon name="person-circle-outline" class="w-5 h-5"></ion-icon> &nbsp;View Profile
                 </button>
