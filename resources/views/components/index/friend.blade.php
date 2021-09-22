@@ -4,7 +4,7 @@
         <img src="{{ Storage::url($user->profile_image) }}" class="absolute w-full h-full inset-0 " alt="">
     </a>
     <div class="flex-1">
-        <a href="{{ route('profile', $user->username) }}" class="text-sm font-semibold capitalize">{{ $user->first_name . ' ' . $user->last_name}}</a>
+        <a href="{{ route('profile', $user->username) }}" class="text-sm font-semibold capitalize">{{ $user->fullname}}</a>
         {{--  @if($user->id != auth()->id())
         TODO mutual friends too many queries
             @if (auth()->user()->mutual_friends($user))
@@ -31,7 +31,7 @@
         <div class="contact-avatar">
             <img src="{{ Storage::url($user->profile_image) }}" alt="">
         </div>
-        <div class="contact-username mt-2">{{$user->first_name.' '.$user->last_name}}</div>
+        <div class="contact-username mt-2">{{$user->fullname}}</div>
         <p class="-mt-1"> 
             <span class="text-gray-400">{{'@'.$user->username }}</span>
             @if($user->about_me)

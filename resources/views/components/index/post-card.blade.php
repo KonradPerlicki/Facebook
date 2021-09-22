@@ -8,7 +8,7 @@
             </a>
             <div class="flex-1 capitalize">
                 <a href="{{ route('profile', $post->author->username) }}" class="text-black dark:text-gray-100 font-semibold">
-                    {{ $post->author->first_name . ' ' . $post->author->last_name}}</a>
+                    {{ $post->author->fullname}}</a>
                 <div class="text-gray-700 flex items-center space-x-2 font-medium">
                     {{$post->created_at->diffForHumans()}} <span> </span>
                     @if($post->who_can_see == '2') <ion-icon name="globe-outline"></ion-icon> @endif
@@ -232,7 +232,7 @@
                 {{-- this complicated relations displays latest user's first and last name who liked exactly this post --}}
                 @if($post->likes->count())
                 <span id="who-likes{{ $post->id }}">
-                    Liked by <strong id="last-liker{{ $post->id }}"> {{ $post->likes->last()->user->first_name .' '.  $post->likes->last()->user->last_name }}</strong>
+                    Liked by <strong id="last-liker{{ $post->id }}"> {{ $post->likes->last()->user->fullname }}</strong>
                 </span>
                 <span id="likes{{ $post->id }}">
                     @if ($post->likes->count()>1)

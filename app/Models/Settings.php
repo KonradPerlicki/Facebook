@@ -9,8 +9,8 @@ class Settings extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['who_can_follow','show_my_activities','display_in_search_engine'];
-
+    protected $guarded = ['id'];
+    
     public function user()
     {
         return $this->belongsTo(User::class);

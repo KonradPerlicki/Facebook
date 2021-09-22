@@ -27,7 +27,6 @@ class PostRequest extends FormRequest
             'content' => 'nullable',
             'image' => 'nullable|image|max:2999',
             'video' => 'nullable|mimetypes:video/*|max:6999',
-            'who_can_see' => 'required|integer'
         ];
     }
 }

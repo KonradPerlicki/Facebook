@@ -18,9 +18,4 @@ class Like extends Model
     {
         return $this->belongsTo(User::class);
     }
-    ##TODO idk czy potrzebna funkcja
-    public function post()
-    {
-        return $this->belongsTo(Post::class);
-    }
 }

@@ -216,7 +216,7 @@
                                 <img src="{{ Storage::url($user->profile_image) }}" alt="">
                             </div>
                             <div class="user_name">
-                                <div> {{ $user->first_name . ' ' . $user->last_name}} </div>
+                                <div> {{ $user->fullname}} </div>
                                 <span> {{ '@'.$user->username }}</span>
                             </div>
                         </a>

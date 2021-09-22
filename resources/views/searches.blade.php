@@ -21,7 +21,7 @@
                                 <div class="flex items-center lg:p-4 p-2.5">
                                     <img src="{{ Storage::url($search->profile_image) }}"
                                         class="bg-gray-200 border border-white rounded-full w-11 h-11 mr-4">
-                                    <span class="font-bold">{{ $search->first_name.' '.$search->last_name}}</span>
+                                    <span class="font-bold">{{ $search->fullname}}</span>
                                     @if(auth()->user()->friendWith($search))
                                         &nbsp;- <span class="italic"> &nbsp;Friend &check;</span>
                                     @endif

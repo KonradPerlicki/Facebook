@@ -30,7 +30,7 @@
             <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2" type="button" uk-close
                 uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
         </div>
-        <form id="create-post" method="POST" action="{{ route('post.create') }}" enctype="multipart/form-data">
+        <form id="create-post" method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="flex flex-1 items-start space-x-4 p-5">
                 <img src="{{ Storage::url($user->profile_image) }}"

@@ -5,7 +5,7 @@
             <a href="{{ route('profile', $myfriends->user->username) }}" class="uk-link-reset mb-2">
                 <div class="flex py-2 pl-2 mb-2 rounded-md hover:bg-gray-200">
                     <img src="assets/images/icons/gift-icon.png" class="w-9 h-9 mr-3" alt="">
-                    <p class="line-clamp-2"> <strong> {{ $myfriends->user->first_name.' '.$myfriends->user->last_name }} </strong>
+                    <p class="line-clamp-2"> <strong> {{ $myfriends->user->fullname }} </strong>
                         have a birthday today .
                     </p>
                 </div>

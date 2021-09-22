@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SettingsRequest;
 use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,20 +17,11 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(SettingsRequest $request)
     {
-        if(isset($request->table)){ //it should update users table 
-            $attributes = $this->validate($request, [
-                'first_name' => 'required|string|max:255|min:3',
-                'last_name' => 'required|string|max:255|min:3',
-                'about_me' => 'string|max:255|nullable',
-                'location' => 'string|max:255|nullable',
-                'working_at' => 'string|max:255|nullable',
-                'relationship' => 'string|max:30|nullable',
-                'background_image' => 'nullable|image|max:1999',
-                'profile_image' => 'nullable|image|max:1999'
-            ]);
-            
+        $attributes = $request->validated();
+
+        if(isset($attributes['first_name'])){ //if has this attr it means profile is updating otherwise privacy settings
             $user = User::find(auth()->id());
 
             if(isset($attributes['background_image'])){
@@ -56,11 +48,6 @@ class SettingsController extends Controller
             $user->update($attributes);
             return back()->with('status', 'Profile updated successfully');
         }else{ //update settings table
-            $attributes = $this->validate($request, [
-                'who_can_follow' => 'required|integer',
-                'show_my_activities' => 'required|integer',
-                'display_in_search_engine' => 'nullable',
-            ]);
             isset($attributes['display_in_search_engine']) 
                 ? $attributes['display_in_search_engine']=1 
                 : $attributes['display_in_search_engine']=0;

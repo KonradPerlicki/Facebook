@@ -7,7 +7,7 @@
         <div class="drop_text">
             <p>
                 <strong onclick="window.location='{{ route('profile', $notification->from->username) }}'" class="cursor-pointer hover:underline">
-                    {{ $notification->from->first_name.' '.$notification->from->last_name }}
+                    {{ $notification->from->fullname }}
                 </strong>
                 
                {{ $notification->content }}

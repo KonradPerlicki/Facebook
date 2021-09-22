@@ -7,7 +7,7 @@
         <img src="{{ Storage::url($user->profile_image) }}" alt="">
     </div>
     <div class="story-text">
-        <div class="story-username"> {{ $user->first_name. ' ' .$user->last_name}}</div>
+        <div class="story-username"> {{ $user->fullname}}</div>
         <p>
             @if(!$user->viewed_story($user->available_story->id))
                 <span class="text-blue-600"> New </span>

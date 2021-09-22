@@ -11,7 +11,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StoryController;
-use App\Http\Controllers\ViewedStoriesController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -58,10 +57,7 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::post('/show-story', [StoryController::class, 'count']);
     
     //post
-    Route::get('/post/{id}',[PostController::class, 'show'])->name('post.show');
-    Route::post('/post',[PostController::class, 'store'])->name('post.create');
-    Route::put('/post/{id}',[PostController::class, 'update'])->name('post.update');
-    Route::delete('/post/{id}',[PostController::class, 'destroy'])->name('post.destroy');
+    Route::resource('/post', PostController::class)->except(['index','edit','create']);
     Route::post('/post-allow-comments', [PostController::class, 'allow_comments']);
     Route::post('/post-disable-comments', [PostController::class, 'disable_comments']);
 
