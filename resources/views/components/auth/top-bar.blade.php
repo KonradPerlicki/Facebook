@@ -1,7 +1,7 @@
 <div class="bg-white py-4 shadow dark:bg-gray-800">
     <div class="max-w-6xl mx-auto">
         <div class="flex items-center lg:justify-between justify-around">
-            <a href="trending.html">
+            <a href="/">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="" class="w-32">
             </a>
 

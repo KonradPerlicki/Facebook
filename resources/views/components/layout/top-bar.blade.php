@@ -207,13 +207,13 @@
 
                     {{-- START: Account image --}}
                     <a href="#">
-                        <img src="{{ Storage::url($user->profile_image) }}" class="is_avatar" alt="">
+                        <img src="{{ $user->prof_image }}" class="is_avatar" alt="">
                     </a>
                     <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
                         <a href="{{ route('profile', $user->username) }}" class="user">
                             <div class="user_avatar">
-                                <img src="{{ Storage::url($user->profile_image) }}" alt="">
+                                <img src="{{ $user->prof_image }}" alt="">
                             </div>
                             <div class="user_name">
                                 <div> {{ $user->fullname}} </div>

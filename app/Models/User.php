@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -44,6 +45,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+    public function getProfImageAttribute()
+    {
+        if(str_contains($this->profile_image,'https')){
+            return $this->profile_image;
+        }else{
+            return Storage::url($this->profile_image);
+        }
     }
 
     public function settings()
@@ -100,6 +109,17 @@ class User extends Authenticatable implements MustVerifyEmail
         
         return $mutual_friends;
     }
+
+    static public function storeInvitedUsers()
+    {
+        $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
+        if(empty($invited_users)){
+            Cache::forever('invited_users', []);
+        }else{
+            Cache::forever('invited_users', $invited_users);
+        }
+    }
+    
     //TODO add if two users have birthday display all of them
     public function hasBirthday($id)
     {

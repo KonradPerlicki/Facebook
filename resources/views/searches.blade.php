@@ -19,7 +19,7 @@
                         @foreach ($searches as $search)
                             <div class="card lg:mx-0 mb-4">
                                 <div class="flex items-center lg:p-4 p-2.5">
-                                    <img src="{{ Storage::url($search->profile_image) }}"
+                                    <img src="{{ $search->prof_image }}"
                                         class="bg-gray-200 border border-white rounded-full w-11 h-11 mr-4">
                                     <span class="font-bold">{{ $search->fullname}}</span>
                                     @if(auth()->user()->friendWith($search))

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\Invite;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,12 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $invited_users = Invite::where('sender_id', auth()->id())->get()->pluck('receiver_id')->toArray();
-        if(empty($invited_users)){
-            Cache::forever('invited_users', []);
-        }else{
-            Cache::forever('invited_users', $invited_users);
-        }
+        User::storeInvitedUsers();
         
         return redirect()->intended(RouteServiceProvider::HOME);
     }

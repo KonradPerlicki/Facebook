@@ -1,7 +1,7 @@
 @props(['user','preview'=>true,'invited'=>false, 'friends'=>false ])
 <div class="flex items-center space-x-4 rounded-md p-2 hover:bg-gray-50">
     <a href="{{ route('profile', $user->username) }}" class="w-12 h-12 flex-shrink-0 overflow-hidden rounded-full relative">
-        <img src="{{ Storage::url($user->profile_image) }}" class="absolute w-full h-full inset-0 " alt="">
+        <img src="{{ $user->prof_image }}" class="absolute w-full h-full inset-0 " alt="">
     </a>
     <div class="flex-1">
         <a href="{{ route('profile', $user->username) }}" class="text-sm font-semibold capitalize">{{ $user->fullname}}</a>
@@ -29,7 +29,7 @@
 <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small" class="uk-drop uk-drop-left-center" style="left: 1348.38px; top: 211px;">
     <div class="contact-list-box">
         <div class="contact-avatar">
-            <img src="{{ Storage::url($user->profile_image) }}" alt="">
+            <img src="{{ $user->prof_image }}" alt="">
         </div>
         <div class="contact-username mt-2">{{$user->fullname}}</div>
         <p class="-mt-1"> 

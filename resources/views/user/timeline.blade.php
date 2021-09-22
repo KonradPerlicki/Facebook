@@ -23,7 +23,7 @@
                                     border-blue-600
                                     @endif rounded-full cursor-pointer"> 
                                     <a class="uk-button" href="{{ Storage::url($story->image)}}"  data-caption="Added {{ $story->expires_at->addHours(-24)->diffForHumans() }} @if($story->user_id == auth()->id()) | Views: {{ $story->views }} @endif">
-                                        <img src="{{ Storage::url($user->profile_image) }}" alt="">
+                                        <img src="{{ $user->prof_image }}" alt="">
                                     </a>
                                 </div>
                                 {{-- Script for marking story as read --}}
@@ -51,7 +51,7 @@
                                 @endif
                             @elseif(!$user->available_story || $story->user_id != auth()->id())
                                 <div class="profile_avatar_holder border-4 border-white"> 
-                                    <img src="{{ Storage::url($user->profile_image) }}" alt="">
+                                    <img src="{{ $user->prof_image }}" alt="">
                                 </div>    
                             @endif
                         </div>

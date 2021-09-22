@@ -50,6 +50,11 @@
                         </button>
                         </div>
                     </form>
+                    <a href="{{ route('auth.google') }}">
+                        <button class="bg-red-500 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">
+                            Log In with Google Account! <ion-icon name="logo-google" class="w-5 h-5 md hydrated fixed ml-24"></ion-icon>
+                        </button>
+                    </a>
                 </div>
             </div>
 </x-layout.layout>

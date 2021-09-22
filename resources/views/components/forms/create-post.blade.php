@@ -1,6 +1,6 @@
 <div class="card lg:mx-0 p-4" uk-toggle="target: #create-post-modal">
     <div class="flex space-x-3">
-        <img src="{{ Storage::url($user->profile_image) }}" class="w-10 h-10 rounded-full">
+        <img src="{{ $user->prof_image }}" class="w-10 h-10 rounded-full">
         <input placeholder="What's Your Mind ?" class="bg-gray-100 hover:bg-gray-200 flex-1 h-10 px-6 rounded-full">
     </div>
     <div class="grid grid-flow-col pt-3 -mx-1 -mb-1 font-semibold text-sm">
@@ -33,7 +33,7 @@
         <form id="create-post" method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="flex flex-1 items-start space-x-4 p-5">
-                <img src="{{ Storage::url($user->profile_image) }}"
+                <img src="{{ $user->prof_image }}"
                     class="bg-gray-200 border border-white rounded-full w-11 h-11">
                 <div class="flex-1 pt-2">
                     <textarea id="content" name="content" class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"

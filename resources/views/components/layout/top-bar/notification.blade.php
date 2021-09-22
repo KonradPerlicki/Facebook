@@ -1,7 +1,7 @@
 <li @if(!$notification->seen) class="border-l-4 border-indigo-500" @endif>
     <a class="cursor-default z-0">
         <div class="drop_avatar" onclick="window.location='{{ route('profile', $notification->from->username) }}'"> 
-            <img src="{{ Storage::url($notification->from->profile_image) }}" alt="" class="cursor-pointer">
+            <img src="{{ $notification->from->prof_image }}" alt="" class="cursor-pointer">
         </div>
         <x-layout.top-bar.notify-icon :type="$notification->type"/>
         <div class="drop_text">

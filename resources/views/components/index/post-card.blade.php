@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
             <a href="{{ route('profile', $post->author->username) }}">
-                <img src="{{ Storage::url($post->author->profile_image) }}"
+                <img src="{{ $post->author->prof_image }}"
                     class="bg-gray-200 border border-white rounded-full w-10 h-10">
             </a>
             <div class="flex-1 capitalize">
@@ -34,7 +34,7 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="flex flex-1 items-start space-x-4 p-5">
-                                    <img src="{{ Storage::url($post->author->profile_image) }}"
+                                    <img src="{{ $post->author->prof_image }}"
                                         class="bg-gray-200 border border-white rounded-full w-11 h-11">
                                     <div class="flex-1 pt-2">
                                         <textarea name="content"
@@ -224,7 +224,7 @@
                     @if($loop->iteration > 3 )
                         @break
                     @endif
-                <img src="{{ Storage::url($liker->user->profile_image) }}" alt=""
+                <img src="{{ $liker->user->prof_image }}" alt=""
                     class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
                 @endforeach
             </div>

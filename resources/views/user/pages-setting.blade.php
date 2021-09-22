@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="row-span-2">
                                     <label>Profile image</label>
-                                    <img src="{{ Storage::url($user->profile_image) }}" height=200  class="w-full rounded-xl">
+                                    <img src="{{ $user->prof_image }}" height=200  class="w-full rounded-xl">
                                     Change profile image <input type="file" name="profile_image" accept="image/*">
                                 </div>
                                 <div>

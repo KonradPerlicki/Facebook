@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
@@ -31,19 +31,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $attributes = $request->validate([
-            'first_name' => 'required|string|max:255|min:3',
-            'last_name' => 'required|string|max:255|min:3',
-            'username' => 'required|string|max:255|min:3|unique:users,username',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()->numbers()],
-            'gender' => 'required',
-            'birth_date' => 'required|date|date_format:Y-m-d',
-            'phone' => 'numeric|digits:9|nullable|unique:users,phone',
-            'terms' => 'required'
-        ]);
+        $attributes = $request->validated();
         $attributes['password'] = Hash::make($attributes['password']);
         $user = User::create($attributes);
 
@@ -53,6 +43,30 @@ class RegisteredUserController extends Controller
         //creating row in settings table with defaults values and corresponding user id
         $request->user()->settings()->create(); 
         
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function finish(Request $request)
+    {
+        $attributes = $this->validate($request, [
+            'first_name' => 'required|string|max:255|min:3',
+            'last_name' => 'required|string|max:255|min:3',
+            'username' => 'required|string|max:255|min:3|unique:users,username',
+            'profile_image' => 'required',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'email_verified_at' => 'required',
+            'gender' => 'required',
+            'birth_date' => 'required|date|date_format:Y-m-d',
+            'phone' => 'numeric|digits:9|nullable|unique:users,phone',
+            'google_id' => 'required',
+            'terms' => 'required'
+        ]);
+        $user = User::create($attributes);
+
+        Auth::login($user);
+        User::storeInvitedUsers();
+        $request->user()->settings()->create(); 
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

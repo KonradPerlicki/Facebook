@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('gender',10);
             $table->date('birth_date');
             $table->string('about_me')->nullable();
@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('profile_image')->default('profile_image/user.png');
             $table->string('background_image')->default('background_image/background.jpg');
             $table->rememberToken();
+            $table->string('google_id')->nullable();
             $table->timestamps();
         });
     }

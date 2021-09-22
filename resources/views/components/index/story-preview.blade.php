@@ -7,7 +7,7 @@
          @else
          border-blue-600
          @endif rounded-full">
-            <img src="{{ Storage::url($user->profile_image) }}" alt="">
+            <img src="{{ $user->prof_image }}" alt="">
         </div>
         <div class="story-content"> <h4> {{ $user->first_name }}</h4> </div>
     </div>
