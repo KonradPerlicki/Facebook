@@ -56,6 +56,15 @@
                     })
                 </script>
             </div>
+            @if (app()->getLocale() == 'pl')
+                <a href="{{ route('language', 'en') }}">
+                    Set English Language
+                </a>
+            @else
+                <a href="{{ route('language', 'pl') }}">
+                    Ustaw Polski Język
+                </a>
+            @endif
                 <div class="right_side">
                 <div class="header_widgets">
                     <a href="#" class="is_icon" uk-tooltip="title: Cart">

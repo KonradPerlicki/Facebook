@@ -6,6 +6,7 @@ use App\Http\Controllers\Ajax\LikeController;
 use App\Http\Controllers\Ajax\InviteController;
 use App\Http\Controllers\Ajax\NotificationController;
 use App\Http\Controllers\Ajax\FriendController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
@@ -29,6 +30,8 @@ require __DIR__.'/auth.php';
 
 //main
 Route::group(['middleware'=> ['verified', 'auth']], function(){
+    Route::get('/language/{lang}', LanguageController::class)->name('language');
+    
     Route::get('/', function () {return view('index', [
         'user' => auth()->user(),
         'posts' => Post::with('author','likes')->latest()->paginate(6),

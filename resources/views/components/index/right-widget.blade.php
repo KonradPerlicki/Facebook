@@ -18,7 +18,7 @@
       <div class="widget card p-5 border-t">
           <div class="flex items-center justify-between mb-2">
               <div>
-                  <h4 class="text-lg font-semibold">Other users</h4>
+                  <h4 class="text-lg font-semibold">{{ __('index.other_users') }}</h4>
               </div>
         </div>
             <div>

@@ -26,6 +26,7 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 - Użytkownicy mają możliwość publikowania 'story', które jest aktywne przez 24h od publikacji,
 - Skorzystałem z accessorów do wyświetlania imienia i nazwiska użytkowników,
 - Możliwość zalogowania się poprzez konto Google lub Github
+- Kilka przykładów z translacji języków wraz z opcją do zmiany Angielski/Polski,
 
 ## Dane do logowania
 - Email: konrad.perlicki01@gmail.com  

@@ -236,7 +236,7 @@
                 </span>
                 <span id="likes{{ $post->id }}">
                     @if ($post->likes->count()>1)
-                        and <strong > {{ $post->likes->count()-1 .' '. Str::plural('Other',$post->likes->count()-1)}}  </strong>
+                        and <strong > {{ $post->likes->count()-1 .' '. trans_choice('post.others',$post->likes->count()-1) }}  </strong>
                     @endif
                 </span>
                 @else
