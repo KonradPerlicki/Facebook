@@ -58,12 +58,17 @@ class RegisteredUserController extends Controller
             'gender' => 'required',
             'birth_date' => 'required|date|date_format:Y-m-d',
             'phone' => 'numeric|digits:9|nullable|unique:users,phone',
-            'google_id' => 'required',
             'terms' => 'required'
         ]);
+        
+        if($request->has('google_id')){
+            $attributes['google_id'] = $request->google_id; 
+        }else{
+            $attributes['github_id'] = $request->github_id;
+        }
         $user = User::create($attributes);
 
-        Auth::login($user);
+        Auth::login($user, true);
         User::storeInvitedUsers();
         $request->user()->settings()->create(); 
 

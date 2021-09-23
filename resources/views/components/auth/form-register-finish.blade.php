@@ -26,22 +26,23 @@
                         <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors"/>
 
                         <div class="grid lg:grid-cols-2 gap-3">
-                            <input type="hidden" name="google_id" value="{{ $user->id }}">
+                            @if (str_contains($user->avatar,'google'))
+                                <input type="hidden" name="google_id" value="{{ $user->id }}">
+                            @else
+                                <input type="hidden" name="github_id" value="{{ $user->id }}">
+                            @endif
+                            
                             <input type="hidden" name="profile_image" value="{{ $user->avatar }}">
                             <input type="hidden" name="email_verified_at" value="{{ now() }}">
                             <input type="hidden" name="email" value="{{ $user->email }}">
-                            @php
-                                $name = explode(' ', $user->name);
-                                $first_name = $name[0];
-                                isset($name[1]) ? $last_name = $name[1] : '';
-                            @endphp
+
                             <div>
                                 <label class="mb-0 @error('first_name') text-red-500 @enderror"> First Name * </label>
-                                <input name="first_name" type="text" placeholder="Your Name" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('first_name') border-2 border-red-500 @enderror" required value=" @if(old('first_name')) {{old('first_name')}} @else {{ $first_name }} @endif ">
+                                <input name="first_name" type="text" placeholder="Your Name" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('first_name') border-2 border-red-500 @enderror" required value="{{old('first_name')}}">
                             </div>
                             <div>
                                 <label class="mb-0 @error('last_name') text-red-500 @enderror"> Last  Name * </label>
-                                <input name="last_name" type="text" placeholder="Last  Name" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('last_name') border-2 border-red-500 @enderror" required value=" @if(old('last_name')) {{old('last_name')}} @else @isset($last_name) {{ $last_name }} @endisset @endif ">
+                                <input name="last_name" type="text" placeholder="Last  Name" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full @error('last_name') border-2 border-red-500 @enderror" required value="{{old('last_name')}}">
                             </div>
                         </div>
                         <div class="grid lg:grid-cols-2 gap-3">

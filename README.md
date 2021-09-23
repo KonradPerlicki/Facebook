@@ -24,6 +24,8 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 - Autor postu ma możliwość edycji postu, wyłączenia komentowania i usunięcia postu,
 - Wyświetlanie powiadomienia jeśli znajomy ma urodziny,
 - Użytkownicy mają możliwość publikowania 'story', które jest aktywne przez 24h od publikacji,
+- Skorzystałem z accessorów do wyświetlania imienia i nazwiska użytkowników,
+- Możliwość zalogowania się poprzez konto Google lub Github
 
 ## Dane do logowania
 - Email: konrad.perlicki01@gmail.com  

@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration
             $table->string('background_image')->default('background_image/background.jpg');
             $table->rememberToken();
             $table->string('google_id')->nullable();
+            $table->string('github_id')->nullable();
             $table->timestamps();
         });
     }

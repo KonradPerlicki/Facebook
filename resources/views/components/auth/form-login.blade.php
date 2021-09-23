@@ -55,6 +55,11 @@
                             Log In with Google Account! <ion-icon name="logo-google" class="w-5 h-5 md hydrated fixed ml-24"></ion-icon>
                         </button>
                     </a>
+                    <a href="{{ route('auth.github') }}">
+                        <button class="bg-gray-700 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">
+                            Log In with Github Account! <ion-icon name="logo-github" class="w-5 h-5 md hydrated fixed ml-24"></ion-icon>
+                        </button>
+                    </a>
                 </div>
             </div>
 </x-layout.layout>

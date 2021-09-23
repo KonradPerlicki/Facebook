@@ -8,20 +8,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleController extends Controller
+class GithubController extends Controller
 {
-    public function googleRedirect()
+    public function githubRedirect()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('github')->redirect();
     }
 
-    public function googleLogin(Request $request)
+    public function githubLogin(Request $request)
     {
-        
-        $user = Socialite::driver('google')->user();
-        $googleUser = User::where('google_id', $user->id)->first();
-        if($googleUser){
-            Auth::login($googleUser, true);
+        $user = Socialite::driver('github')->user();
+        $githubUser = User::where('github_id', $user->id)->first();
+        if($githubUser){
+            Auth::login($githubUser, true);
+
             $request->session()->regenerate();
 
             User::storeInvitedUsers();
