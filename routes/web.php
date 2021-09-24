@@ -1,18 +1,17 @@
 <?php
 
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Ajax\LikeController;
 use App\Http\Controllers\Ajax\InviteController;
 use App\Http\Controllers\Ajax\NotificationController;
 use App\Http\Controllers\Ajax\FriendController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StoryController;
-use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,13 +28,10 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 //main
-Route::group(['middleware'=> ['verified', 'auth']], function(){
+Route::middleware(['verified', 'auth'])->group(function(){
     Route::get('/language/{lang}', LanguageController::class)->name('language');
     
-    Route::get('/', function () {return view('index', [
-        'user' => auth()->user(),
-        'posts' => Post::with('author','likes')->latest()->paginate(6),
-    ]);})->name('home');
+    Route::get('/', HomeController::class)->name('home');
 
     //ajax
     Route::post('/like', [LikeController::class, 'manage_likes']);
@@ -51,7 +47,6 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     //unfriend
     Route::post('/friend-remove/{id}',[FriendController::class, 'unfriend'])->name('unfriend');
 
-
     //profile
     Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile');
     //stories
@@ -61,8 +56,6 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     
     //post
     Route::resource('/post', PostController::class)->except(['index','edit','create']);
-    Route::post('/post-allow-comments', [PostController::class, 'allow_comments']);
-    Route::post('/post-disable-comments', [PostController::class, 'disable_comments']);
 
     //settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
@@ -72,20 +65,11 @@ Route::group(['middleware'=> ['verified', 'auth']], function(){
     Route::get('/search', [SearchController::class, 'index']);
     Route::post('/search', [SearchController::class, 'store'])->name('search.add');
     
-
-
-
-    #Route::get('/pages', [PageController::class, 'index'])->name('pages');
-    #Route::get('/videos', [VideoController::class, 'index'])->name('videos');
-    Route::get('/groups', [GroupController::class, 'index'])->name('groups');
-    Route::get('/courses', [CourseController::class, 'index'])->name('courses');
-    #Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
-    #Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-    #Route::get('/products', [ProductController::class, 'index'])->name('products');
-    #Route::get('/events', [EventController::class, 'index'])->name('events');
-    #Route::get('/albums', [AlbumController::class, 'index'])->name('albums');
-    #Route::get('/games', [GameController::class, 'index'])->name('games');
-    #Route::get('/forums', [ForumController::class, 'index'])->name('forums');
+    //comments
+    Route::post('/comment/{post}', [CommentController::class, 'store'])->name('comment.add');
+    Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('comment.destroy');
+    Route::post('/allow-comments', [CommentController::class, 'allow_comments']);
+    Route::post('/disable-comments', [CommentController::class, 'disable_comments']);
 
 });
 

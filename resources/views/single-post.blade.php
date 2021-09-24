@@ -11,7 +11,7 @@
                     <!-- Validation Errors -->
                     <x-flash-messages.auth-validation-errors class="mb-4 p-4 bg-red-100 rounded-xl" :errors="$errors" />
                     {{-- Display single post --}}
-                    <x-index.post-card :post="$post" :invites="$user->invites"/>
+                    <x-index.post-card :allComments="true" :post="$post" :invites="$user->invites"/>
               </div>
               {{-- START: Right column --}}
               <x-index.right-widget />

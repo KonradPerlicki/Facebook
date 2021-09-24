@@ -63,7 +63,7 @@
                       <x-forms.create-post :user="$user"/>
                       {{-- END: Create Post Section --}}
                       @foreach ($posts as $post)
-                          <x-index.post-card :post="$post" :invites="$user->invites"/>
+                          <x-index.post-card :allComments="false" :post="$post" :invites="$user->invites"/>
                       @endforeach
                       {{ $posts->links() }}
                   </div>

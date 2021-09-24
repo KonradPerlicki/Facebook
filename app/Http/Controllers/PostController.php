@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function show($id)
     {
-        $post = Post::with('author','likes')->find($id);
+        $post = Post::with('author','likes','comments')->find($id);
         if(!$post){
             abort(404);
         }
@@ -69,13 +69,4 @@ class PostController extends Controller
         return back()->with('status', 'Post deleted successfully');
     }
 
-    public function allow_comments()
-    {
-        Post::find(request()->post_id)->update(['allow_comments'=>true]);
-    }
-
-    public function disable_comments()
-    {
-        Post::find(request()->post_id)->update(['allow_comments'=>false]);
-    }
 }

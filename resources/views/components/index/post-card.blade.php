@@ -41,10 +41,10 @@
                                             class="uk-textare rounded-xl border-0 text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                                             rows="5"
                                             placeholder="What's Your Mind ?">{{ $post->content }}</textarea>
-                                        @if($post->image || $post->video)
+                                        @if($post->img || $post->video)
                                         <div class="ml-auto w-40 h-40">
-                                            @if($post->image)
-                                            <img src="{{ Storage::url($post->image) }}" class="w-40 h-40">
+                                            @if($post->img)
+                                            <img src="{{ $post->img }}" class="w-40 h-40">
                                             <div class="checkbox">
                                                 <input id="remove_image{{ $post->id }}" type="checkbox"
                                                     name="remove_image">
@@ -159,12 +159,10 @@
 
     <div class="p-3 pt-0 border-b dark:border-gray-700">
         <p>{{ $post->content }}</p>
-        {{-- TODO: add -with <span></span> --}}
-        @if($post->image)
+        @if($post->img)
         <div uk-lightbox>
-            <a href="{{ Storage::url($post->image) }}">
-                {{-- TODO Change this and PostFactory --}}
-                <img src="{{ Storage::url($post->image) }}" alt="" class="w-full object-cover">
+            <a href="{{ $post->img }}">
+                <img src="{{ $post->img }}" alt="" class="w-full object-cover">
             </a>
         </div>
         @endif
@@ -196,27 +194,6 @@
                     <div id="like{{ $post->id }}" > Like</div>
                 </div>
             @endif
-            <a href="#" uk-toggle="target: #all-likers{{ $post->id }}" class="flex items-center space-x-2">
-                <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
-                        height="22" class="dark:text-gray-100">
-                        <path fill-rule="evenodd"
-                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div> Comment</div>
-            </a>
-            <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
-                <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22"
-                        height="22" class="dark:text-gray-100">
-                        <path
-                            d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                    </svg>
-                </div>
-                <div> Share</div>
-            </a>
         </div>
         <a id="like-section{{ $post->id }}" uk-toggle="target:#all-likers{{ $post->id }}" class="flex items-center space-x-3 pt-2 hover:underline cursor-pointer"> 
             <div id="likers-images{{ $post->id }}" class="flex items-center">{{-- TODO maybe on click display modal with all users who like and columns for mutual and not mutual --}}
@@ -265,8 +242,7 @@
                 </h2>
                 <div class="px-2 uk-switcher" id="likers{{ $post->id }}">
                     <div>
-                        {{-- TODO add mutual friends with that user and update right widget also --}}
-                        @foreach($post->likes as $liker)
+                        @forelse($post->likes as $liker)
                             @if(in_array($liker->user->id, Cache::get('invited_users'))){{-- true or false if is invited --}} 
                                 <x-index.friend :user="$liker->user" :preview="false" :invited="true"/>
                             @elseif($liker->user->friendWith(auth()->user())) {{-- are friends --}}
@@ -274,12 +250,11 @@
                             @else  {{-- not invited and not friend --}}
                                 <x-index.friend :user="$liker->user" :preview="false" />
                             @endif
-                        @endforeach
-                        @if(!$post->likes->count()){{-- THIS SHOULD BE DONE IN OTHER WAY - loading all likers for every post is unnecessary --}}
+                        @empty{{-- THIS SHOULD BE DONE IN OTHER WAY - loading all likers for every post is unnecessary --}}
                             <div class="text-lg text-center pt-3 text-gray-400">
                                 No one liked this post yet.
                             </div>
-                        @endif
+                        @endforelse
                     </div>
                     <div>
                         @foreach($post->likes as $liker)
@@ -296,19 +271,34 @@
                 </div>
             </div>
         </div>
-            
-        <div class="border-t py-4 space-y-4 dark:border-gray-600">
-            <x-index.post-comment />
-            <x-index.post-comment />
-        </div>
-        
-        <a href="#" class="hover:text-blue-600 hover:underline"> Veiw 8 more Comments </a>
+        @if($post->allow_comments)
+            <div class="border-t py-4 space-y-4 dark:border-gray-600">
+                @if ($allComments)
+                    @foreach ($post->comments as $comment)
+                        <x-index.post-comment :comment="$comment"/>
+
+                    @endforeach
+                @else
+                    @if($post->comments->count())            
+                        <x-index.post-comment :comment="$post->comments[0]"/>
+                    @else
+                        <p class="text-center italic">There is no comments yet</p>
+                    @endif
+                @endif
+            </div>
+            @if($post->comments->count() > 1 && !$allComments)
+                <a href="{{ route('post.show', $post->id) }}" class="hover:text-blue-600 hover:underline"> View {{ $post->comments->count()-1 }} more Comments </a>
+            @endif
+            <form method="POST" action="{{ route('comment.add', $post) }}">
+                @csrf
+                <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
+                    <input name="content" placeholder="Add your Comment.." class="bg-transparent max-h-10 shadow-none px-5">
+                </div>
+            </form>
+        @else
         <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
-            <input placeholder="Add your Comment.." class="bg-transparent max-h-10 shadow-none px-5">
-            <label for="commentImage" class="-m-0.5 absolute bottom-2 flex items-center right-3 text-xl">
-                <ion-icon name="image-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                <input type="file" id="commentImage" hidden>
-            </label>
+            <input disabled placeholder="Comments are disabled" class="bg-transparent max-h-10 shadow-none px-5">
         </div>
+        @endif
     </div>
 </div>

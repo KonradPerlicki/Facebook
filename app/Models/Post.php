@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -11,6 +12,14 @@ class Post extends Model
 
     protected $guarded = ['id'];
 
+    public function getImgAttribute()
+    {
+        if(str_contains($this->image,'https')){
+            return $this->image;
+        }else{
+            return Storage::url($this->image);
+        }
+    }
 
     public function author()
     {
@@ -27,4 +36,8 @@ class Post extends Model
         return $this->likes->contains('user_id', $user->id);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }

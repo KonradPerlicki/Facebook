@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use App\Models\Invite;
 use App\Models\Like;
 use App\Models\Post;
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
         Post::factory(20)->create();
         Settings::factory(15)->create();
         Like::factory(100)->create();
+        Comment::factory(100)->create();
         #Invite::factory(50)->create(); invite is related with notifications
 
     }
