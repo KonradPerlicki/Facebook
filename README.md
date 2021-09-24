@@ -8,8 +8,7 @@
 </p>
 
 ## O projekcie
-Jest to mój pierwszy i docelowo dosyć duży projekt wykonany przy pomocy frameworku Laravel, który ma przypominać prawdziwego Facebooka.  
-Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
+Jest to mój pierwszy projekt wykonany przy pomocy frameworku Laravel, który ma przypominać prawdziwego Facebooka.  
 
 
 ## Funkcjonalności
@@ -24,9 +23,10 @@ Strona jest ciągle rozbudowywana o kolejne funkcjonalności.
 - Autor postu ma możliwość edycji postu, wyłączenia komentowania i usunięcia postu,
 - Wyświetlanie powiadomienia jeśli znajomy ma urodziny,
 - Użytkownicy mają możliwość publikowania 'story', które jest aktywne przez 24h od publikacji,
-- Skorzystałem z accessorów do wyświetlania imienia i nazwiska użytkowników,
+- Skorzystałem z accessorów do wyświetlania imienia i nazwiska użytkowników oraz zdjęć,
 - Możliwość zalogowania się poprzez konto Google lub Github
 - Kilka przykładów z translacji języków wraz z opcją do zmiany Angielski/Polski,
+- Komentowanie postów z możliwością usunięcia,
 
 ## Dane do logowania
 - Email: konrad.perlicki01@gmail.com  
