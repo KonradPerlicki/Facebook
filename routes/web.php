@@ -44,7 +44,7 @@ Route::middleware(['verified', 'auth'])->group(function(){
     //ajax - accepting/rejecting friend requests
     Route::post('/friend-accept',[FriendController::class, 'store']);
     Route::delete('/friend-decline',[FriendController::class, 'destroy']);
-    //unfriend
+    //ajax - unfriend
     Route::post('/friend-remove/{id}',[FriendController::class, 'unfriend'])->name('unfriend');
 
     //profile
